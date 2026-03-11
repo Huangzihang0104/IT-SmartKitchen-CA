@@ -1,0 +1,74 @@
+{% extends 'kitchen/base.html' %}
+
+{% block title %}Recipe Detail | SmartKitchen{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="/dashboard/" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Dashboard
+    </a>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-lg-5">
+        <div class="card p-4 h-100">
+            <div class="recipe-placeholder d-flex align-items-center justify-content-center rounded-4">
+                <div class="text-center">
+                    <i class="bi bi-image fs-1 text-secondary"></i>
+                    <p class="text-muted mb-0 mt-2">Recipe Image Placeholder</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                <div>
+                    <h1 class="h2 fw-bold mb-1">Creamy Mushroom Pasta</h1>
+                    <p class="text-muted mb-0">Cook time: 25 mins | Difficulty: Easy</p>
+                </div>
+
+                {% csrf_token %}
+                <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
+                    <button
+                        type="button"
+                        class="btn btn-success mark-cooked-btn"
+                        data-url="/recipe/mark-cooked/">
+                        Mark as Cooked
+                    </button>
+                    <div id="cook-status-message" class="small text-success"></div>
+                </div>
+            </div>
+
+            <h2 class="h5 mt-4">Ingredients</h2>
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>200 g Pasta</span>
+                    <span class="badge badge-soft-success">In Stock</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>150 g Mushrooms</span>
+                    <span class="badge badge-soft-success">In Stock</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>100 ml Cream</span>
+                    <span class="badge badge-soft-danger">Missing</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>2 cloves Garlic</span>
+                    <span class="badge badge-soft-success">In Stock</span>
+                </li>
+            </ul>
+
+            <h2 class="h5">Instructions</h2>
+            <ol class="mb-0">
+                <li class="mb-2">Boil the pasta until al dente.</li>
+                <li class="mb-2">Saute garlic and mushrooms in a pan.</li>
+                <li class="mb-2">Add cream and stir until smooth.</li>
+                <li class="mb-2">Mix in the cooked pasta and serve hot.</li>
+            </ol>
+        </div>
+    </div>
+</div>
+{% endblock %}

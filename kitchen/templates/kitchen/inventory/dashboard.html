@@ -1,0 +1,121 @@
+{% extends 'kitchen/base.html' %}
+
+{% block title %}Inventory Dashboard | SmartKitchen{% endblock %}
+
+{% block content %}
+<div class="hero-card mb-4">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1 class="h2 fw-bold">Inventory Dashboard</h1>
+            <p class="mb-0">Track ingredients, monitor expiry dates, and reduce food waste.</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <span class="badge bg-light text-success fs-6">Total items: 3</span>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-lg-4">
+        <div class="card p-4">
+            <h2 class="section-title h4">Add Ingredient</h2>
+
+            <form>
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Ingredient Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="e.g. Tomato">
+                </div>
+
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <input type="number" id="quantity" class="form-control" placeholder="e.g. 2">
+                </div>
+
+                <div class="mb-3">
+                    <label for="unit" class="form-label">Unit</label>
+                    <input type="text" id="unit" class="form-control" placeholder="e.g. pcs, g, ml">
+                </div>
+
+                <div class="mb-3">
+                    <label for="expiry_date" class="form-label">Expiry Date</label>
+                    <input type="text" id="expiry_date" class="form-control" placeholder="YYYY-MM-DD">
+                </div>
+
+                <button type="button" class="btn btn-success w-100">Add Ingredient</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-8">
+        <div class="card p-4">
+            <h2 class="section-title h4">My Inventory</h2>
+
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Qty</th>
+                            <th>Expiry</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-table-body">
+                        <tr id="ingredient-row-1">
+                            <td>Milk</td>
+                            <td>1 bottle</td>
+                            <td>2026-03-13</td>
+                            <td><span class="badge badge-soft-warning">Expiring Soon</span></td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-outline-secondary btn-sm">Edit</button>
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-danger btn-sm delete-ingredient-btn"
+                                    data-id="1"
+                                    data-url="/ingredients/delete/1/">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <tr id="ingredient-row-2">
+                            <td>Eggs</td>
+                            <td>6 pcs</td>
+                            <td>2026-03-18</td>
+                            <td><span class="badge badge-soft-success">Fresh</span></td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-outline-secondary btn-sm">Edit</button>
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-danger btn-sm delete-ingredient-btn"
+                                    data-id="2"
+                                    data-url="/ingredients/delete/2/">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <tr id="ingredient-row-3">
+                            <td>Spinach</td>
+                            <td>200 g</td>
+                            <td>2026-03-10</td>
+                            <td><span class="badge badge-soft-danger">Expired</span></td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-outline-secondary btn-sm">Edit</button>
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-danger btn-sm delete-ingredient-btn"
+                                    data-id="3"
+                                    data-url="/ingredients/delete/3/">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+.card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.06);
+}
+
+.btn {
+    border-radius: 0.75rem;
+}
+
+.form-control,
+.form-select {
+    border-radius: 0.75rem;
+}
+
+.section-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-card {
+    background: linear-gradient(135deg, #198754, #20c997);
+    color: white;
+    border-radius: 1.25rem;
+    padding: 2rem;
+}
+
+.badge-soft-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.badge-soft-warning {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+.badge-soft-danger {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.recipe-image {
+    width: 100%;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    outline: 2px solid #198754;
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+.recipe-placeholder {
+    min-height: 320px;
+    background-color: #e9ecef;
+}
