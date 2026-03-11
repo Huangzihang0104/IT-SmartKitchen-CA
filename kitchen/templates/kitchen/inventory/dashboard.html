@@ -10,7 +10,7 @@
             <p class="mb-0">Track ingredients, monitor expiry dates, and reduce food waste.</p>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-            <span class="badge bg-light text-success fs-6">Total items: 3</span>
+            <span id="inventory-count-badge" class="badge bg-light text-success fs-6">Total items: 3</span>
         </div>
     </div>
 </div>
@@ -52,7 +52,7 @@
         <div class="card p-4">
             <h2 class="section-title h4">My Inventory</h2>
 
-            <div class="table-responsive">
+            <div class="table-responsive d-none d-md-block">
                 <table class="table align-middle">
                     <thead>
                         <tr>
@@ -64,7 +64,7 @@
                         </tr>
                     </thead>
                     <tbody id="inventory-table-body">
-                        <tr id="ingredient-row-1">
+                        <tr data-ingredient-id="1">
                             <td>Milk</td>
                             <td>1 bottle</td>
                             <td>2026-03-13</td>
@@ -75,12 +75,12 @@
                                     type="button"
                                     class="btn btn-outline-danger btn-sm delete-ingredient-btn"
                                     data-id="1"
-                                    data-url="/ingredients/delete/1/">
+                                    data-url="{% url 'delete_ingredient' 1 %}">
                                     Delete
                                 </button>
                             </td>
                         </tr>
-                        <tr id="ingredient-row-2">
+                        <tr data-ingredient-id="2">
                             <td>Eggs</td>
                             <td>6 pcs</td>
                             <td>2026-03-18</td>
@@ -91,12 +91,12 @@
                                     type="button"
                                     class="btn btn-outline-danger btn-sm delete-ingredient-btn"
                                     data-id="2"
-                                    data-url="/ingredients/delete/2/">
+                                    data-url="{% url 'delete_ingredient' 2 %}">
                                     Delete
                                 </button>
                             </td>
                         </tr>
-                        <tr id="ingredient-row-3">
+                        <tr data-ingredient-id="3">
                             <td>Spinach</td>
                             <td>200 g</td>
                             <td>2026-03-10</td>
@@ -107,13 +107,78 @@
                                     type="button"
                                     class="btn btn-outline-danger btn-sm delete-ingredient-btn"
                                     data-id="3"
-                                    data-url="/ingredients/delete/3/">
+                                    data-url="{% url 'delete_ingredient' 3 %}">
                                     Delete
                                 </button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div id="inventory-mobile-list" class="d-md-none">
+                <div class="card p-3 mb-3" data-ingredient-id="1">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                        <div>
+                            <div class="fw-bold">Milk</div>
+                            <div class="text-muted small">1 bottle</div>
+                        </div>
+                        <span class="badge badge-soft-warning">Expiring Soon</span>
+                    </div>
+                    <div class="small text-muted mb-3">Expiry: 2026-03-13</div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary btn-sm flex-fill">Edit</button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm flex-fill delete-ingredient-btn"
+                            data-id="1"
+                            data-url="{% url 'delete_ingredient' 1 %}">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card p-3 mb-3" data-ingredient-id="2">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                        <div>
+                            <div class="fw-bold">Eggs</div>
+                            <div class="text-muted small">6 pcs</div>
+                        </div>
+                        <span class="badge badge-soft-success">Fresh</span>
+                    </div>
+                    <div class="small text-muted mb-3">Expiry: 2026-03-18</div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary btn-sm flex-fill">Edit</button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm flex-fill delete-ingredient-btn"
+                            data-id="2"
+                            data-url="{% url 'delete_ingredient' 2 %}">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card p-3" data-ingredient-id="3">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                        <div>
+                            <div class="fw-bold">Spinach</div>
+                            <div class="text-muted small">200 g</div>
+                        </div>
+                        <span class="badge badge-soft-danger">Expired</span>
+                    </div>
+                    <div class="small text-muted mb-3">Expiry: 2026-03-10</div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary btn-sm flex-fill">Edit</button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm flex-fill delete-ingredient-btn"
+                            data-id="3"
+                            data-url="{% url 'delete_ingredient' 3 %}">
+                            Delete
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

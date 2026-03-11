@@ -1,0 +1,11 @@
+{% if messages %}
+    <div class="mb-3" aria-live="polite" aria-atomic="true">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} rounded-4 shadow-sm mb-2" role="status">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div id="global-status-message" class="mb-3" aria-live="polite" aria-atomic="true"></div>

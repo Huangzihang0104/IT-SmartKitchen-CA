@@ -1,0 +1,169 @@
+{% extends 'kitchen/base.html' %}
+
+{% block title %}Recipe Recommendations | SmartKitchen{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <div class="mb-3">
+        <div class="small text-uppercase text-muted fw-semibold mb-2">Discover recipes</div>
+        <h1 class="editorial-heading mb-3">Cook from what you already have.</h1>
+        <p class="editorial-subtitle mb-4">
+            Browse personalised recipe ideas based on your current inventory, cooking time, and dietary preferences.
+        </p>
+    </div>
+
+    <div class="card p-3 p-md-4 mb-3">
+        <div class="row g-3 align-items-end">
+            <div class="col-12 col-lg-6">
+                <label for="recipe-search" class="form-label fw-semibold">Search recipes</label>
+                <input type="text" id="recipe-search" class="form-control" placeholder="Search pasta, soup, rice...">
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2">
+                <label for="cook-time" class="form-label fw-semibold">Time</label>
+                <select id="cook-time" class="form-select">
+                    <option selected>Any</option>
+                    <option>Under 15 mins</option>
+                    <option>Under 30 mins</option>
+                    <option>30+ mins</option>
+                </select>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2">
+                <label for="difficulty" class="form-label fw-semibold">Difficulty</label>
+                <select id="difficulty" class="form-select">
+                    <option selected>Any</option>
+                    <option>Easy</option>
+                    <option>Medium</option>
+                    <option>Hard</option>
+                </select>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2">
+                <label for="dietary" class="form-label fw-semibold">Diet</label>
+                <select id="dietary" class="form-select">
+                    <option selected>Any</option>
+                    <option>Vegetarian</option>
+                    <option>Vegan</option>
+                    <option>High Protein</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mt-3">
+            <span class="recipe-chip">Quick dinners</span>
+            <span class="recipe-chip">Vegetarian</span>
+            <span class="recipe-chip">Use expiring items</span>
+            <span class="recipe-chip">High protein</span>
+            <span class="recipe-chip">Pantry friendly</span>
+        </div>
+    </div>
+</div>
+
+<div class="card featured-recipe-card p-4 p-lg-5 mb-5">
+    <div class="row g-4 align-items-center">
+        <div class="col-12 col-lg-6">
+            <div class="recipe-thumb recipe-thumb-pasta">
+                <div class="recipe-thumb-content">
+                    <span class="recipe-thumb-label">Featured recommendation</span>
+                    <p class="recipe-thumb-title">Creamy Mushroom Pasta</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="featured-recipe-copy">
+                <div class="small text-uppercase text-success fw-semibold mb-2">Best match today</div>
+                <h2 class="display-6 fw-bold mb-3">Creamy Mushroom Pasta</h2>
+                <p class="recipe-meta mb-3">25 mins · Easy · Vegetarian · 85% match</p>
+                <p class="mb-4">
+                    A quick, creamy pasta dish that makes excellent use of mushrooms, garlic, and ingredients already in your kitchen.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                    <span class="badge badge-soft-warning">Uses expiring milk</span>
+                    <span class="badge badge-soft-success">Weeknight friendly</span>
+                </div>
+
+                <a href="{% url 'recipe_detail' %}" class="btn btn-success px-4">View Recipe</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h2 class="h3 fw-bold mb-0">More recipes you can make</h2>
+    <span class="text-muted">3 results</span>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-md-6 col-xl-4">
+        <div class="card h-100 overflow-hidden">
+            <div class="p-3">
+                <div class="recipe-thumb recipe-thumb-omelette">
+                    <div class="recipe-thumb-content">
+                        <span class="recipe-thumb-label">Quick & fresh</span>
+                        <p class="recipe-thumb-title">Spinach Omelette</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <h3 class="h4 fw-bold">Spinach Omelette</h3>
+                <p class="recipe-meta mb-2">15 mins · Easy · High Protein</p>
+                <p class="mb-3">An efficient way to use eggs and spinach before they expire.</p>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="badge badge-soft-success">92% Match</span>
+                    <span class="badge badge-soft-danger">Spinach expiring</span>
+                </div>
+                <a href="{% url 'recipe_detail' %}" class="btn btn-success w-100">View Details</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4">
+        <div class="card h-100 overflow-hidden">
+            <div class="p-3">
+                <div class="recipe-thumb recipe-thumb-rice">
+                    <div class="recipe-thumb-content">
+                        <span class="recipe-thumb-label">Pantry friendly</span>
+                        <p class="recipe-thumb-title">Garlic Fried Rice</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <h3 class="h4 fw-bold">Garlic Fried Rice</h3>
+                <p class="recipe-meta mb-2">20 mins · Medium · Dairy Free</p>
+                <p class="mb-3">A flexible recipe ideal for leftover rice and quick weeknight cooking.</p>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="badge badge-soft-success">78% Match</span>
+                    <span class="badge badge-soft-success">Good pantry fit</span>
+                </div>
+                <a href="{% url 'recipe_detail' %}" class="btn btn-success w-100">View Details</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4">
+        <div class="card h-100 overflow-hidden">
+            <div class="p-3">
+                <div class="recipe-thumb recipe-thumb-bake">
+                    <div class="recipe-thumb-content">
+                        <span class="recipe-thumb-label">Comfort food</span>
+                        <p class="recipe-thumb-title">Tomato Pasta Bake</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <h3 class="h4 fw-bold">Tomato Pasta Bake</h3>
+                <p class="recipe-meta mb-2">30 mins · Easy · Family Style</p>
+                <p class="mb-3">A simple baked pasta dish that works well with staple cupboard ingredients.</p>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="badge badge-soft-success">74% Match</span>
+                    <span class="badge badge-soft-warning">Great for leftovers</span>
+                </div>
+                <a href="{% url 'recipe_detail' %}" class="btn btn-success w-100">View Details</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

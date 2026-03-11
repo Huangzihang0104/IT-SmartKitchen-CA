@@ -1,21 +1,32 @@
 body {
-    background-color: #f8f9fa;
-    color: #212529;
+    background-color: #f6f4ef;
+    color: #1f1f1f;
 }
 
 .card {
-    border: none;
+    border: 1px solid #ece7de;
     border-radius: 1rem;
-    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.06);
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.035);
+    background-color: #ffffff;
 }
 
 .btn {
-    border-radius: 0.75rem;
+    border-radius: 999px;
 }
 
 .form-control,
 .form-select {
-    border-radius: 0.75rem;
+    border-radius: 0.85rem;
+    border: 1px solid #ddd6cb;
+    background-color: #fff;
+}
+
+.form-control:focus,
+.form-select:focus,
+.btn:focus {
+    outline: 2px solid #198754;
+    outline-offset: 2px;
+    box-shadow: none;
 }
 
 .section-title {
@@ -24,25 +35,26 @@ body {
 }
 
 .hero-card {
-    background: linear-gradient(135deg, #198754, #20c997);
+    background: linear-gradient(135deg, #1f6a43, #2f8f61);
     color: white;
     border-radius: 1.25rem;
     padding: 2rem;
+    border: none;
 }
 
 .badge-soft-success {
-    background-color: #d1e7dd;
-    color: #0f5132;
+    background-color: #dcefe4;
+    color: #24523a;
 }
 
 .badge-soft-warning {
-    background-color: #fff3cd;
-    color: #664d03;
+    background-color: #f5ead1;
+    color: #7a5a16;
 }
 
 .badge-soft-danger {
-    background-color: #f8d7da;
-    color: #842029;
+    background-color: #f4d9d8;
+    color: #8c2f2a;
 }
 
 .table td,
@@ -57,15 +69,157 @@ body {
     border-radius: 1rem;
 }
 
-.btn:focus,
-.form-control:focus,
-.form-select:focus {
-    outline: 2px solid #198754;
-    outline-offset: 2px;
-    box-shadow: none;
-}
-
 .recipe-placeholder {
     min-height: 320px;
-    background-color: #e9ecef;
+    background-color: #ece7de;
+}
+
+.navbar .nav-link.active {
+    color: #ffffff !important;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.recipe-thumb {
+    min-height: 280px;
+    border-radius: 1rem;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.recipe-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.06));
+}
+
+.recipe-thumb-content {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1;
+    color: #fff;
+}
+
+.recipe-thumb-label {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+    opacity: 0.92;
+}
+
+.recipe-thumb-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0;
+}
+
+.recipe-thumb-pasta {
+    background-image: url("https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=1200&q=80");
+}
+
+.recipe-thumb-omelette {
+    background-image: url("https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=1200&q=80");
+}
+
+.recipe-thumb-rice {
+    background-image: url("https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1200&q=80");
+}
+
+.recipe-thumb-bake {
+    background-image: url("https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1200&q=80");
+}
+
+.editorial-heading {
+    font-size: clamp(2.2rem, 4vw, 4rem);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.editorial-subtitle {
+    font-size: 1.08rem;
+    color: #5c5c5c;
+    max-width: 760px;
+}
+
+.recipe-chip {
+    display: inline-block;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid #e7e0d5;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.recipe-meta {
+    color: #666;
+    font-size: 0.98rem;
+}
+
+.featured-recipe-card {
+    border-radius: 1.25rem;
+    overflow: hidden;
+}
+
+.featured-recipe-copy {
+    padding: 1.25rem 0;
+}
+
+.muted-divider {
+    height: 1px;
+    background: #ece7de;
+    border: none;
+    margin: 2rem 0;
+}
+
+.recipe-detail-thumb {
+    min-height: 520px;
+    border-radius: 1rem;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.recipe-detail-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.03));
+}
+
+.recipe-detail-thumb-content {
+    position: absolute;
+    left: 1.25rem;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 1;
+    color: #fff;
+}
+
+.recipe-detail-thumb-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.recipe-detail-thumb-subtitle {
+    font-size: 0.95rem;
+    opacity: 0.92;
+    margin-bottom: 0.5rem;
+}
+
+.recipe-detail-pasta {
+    background-image: url("https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=1200&q=80");
 }

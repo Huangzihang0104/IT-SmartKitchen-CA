@@ -3,13 +3,58 @@ function getCSRFToken() {
     return csrfInput ? csrfInput.value : '';
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const deleteButtons = document.querySelectorAll('.delete-ingredient-btn');
+function showGlobalMessage(message, type = 'success') {
+    const container = document.getElementById('global-status-message');
+    if (!container) return;
 
-    deleteButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            const itemId = this.dataset.id;
-            const url = this.dataset.url;
+    container.innerHTML = `
+        <div class="alert alert-${type} rounded-4 shadow-sm mb-2" role="status">
+            ${message}
+        </div>
+    `;
+}
+
+function updateInventoryCount() {
+    const ingredientElements = document.querySelectorAll('[data-ingredient-id]');
+    const uniqueIds = new Set(
+        Array.from(ingredientElements).map(function (element) {
+            return element.dataset.ingredientId;
+        })
+    );
+
+    const countBadge = document.getElementById('inventory-count-badge');
+    if (countBadge) {
+        countBadge.textContent = `Total items: ${uniqueIds.size}`;
+    }
+
+    const desktopBody = document.getElementById('inventory-table-body');
+    const mobileList = document.getElementById('inventory-mobile-list');
+
+    if (uniqueIds.size === 0) {
+        if (desktopBody) {
+            desktopBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">No ingredients in inventory.</td>
+                </tr>
+            `;
+        }
+
+        if (mobileList) {
+            mobileList.innerHTML = `
+                <div class="text-center text-muted py-4">No ingredients in inventory.</div>
+            `;
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    updateInventoryCount();
+
+    document.addEventListener('click', function (event) {
+        const deleteButton = event.target.closest('.delete-ingredient-btn');
+        if (deleteButton) {
+            const itemId = deleteButton.dataset.id;
+            const url = deleteButton.dataset.url;
 
             fetch(url, {
                 method: 'POST',
@@ -23,27 +68,28 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(function (data) {
                 if (data.success) {
-                    const row = document.getElementById(`ingredient-row-${itemId}`);
-                    if (row) {
-                        row.remove();
-                    }
+                    document.querySelectorAll(`[data-ingredient-id="${itemId}"]`).forEach(function (element) {
+                        element.remove();
+                    });
+
+                    updateInventoryCount();
+                    showGlobalMessage('Ingredient deleted successfully.', 'success');
                 } else {
-                    alert(data.message || 'Delete failed.');
+                    showGlobalMessage(data.message || 'Delete failed.', 'danger');
                 }
             })
             .catch(function (error) {
                 console.error('Error:', error);
-                alert('Something went wrong.');
+                showGlobalMessage('Something went wrong while deleting the ingredient.', 'danger');
             });
-        });
-    });
 
-    const markCookedButton = document.querySelector('.mark-cooked-btn');
-    const cookStatusMessage = document.getElementById('cook-status-message');
+            return;
+        }
 
-    if (markCookedButton) {
-        markCookedButton.addEventListener('click', function () {
-            const url = this.dataset.url;
+        const markCookedButton = event.target.closest('.mark-cooked-btn');
+        if (markCookedButton) {
+            const url = markCookedButton.dataset.url;
+            const cookStatusMessage = document.getElementById('cook-status-message');
 
             fetch(url, {
                 method: 'POST',
@@ -60,10 +106,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (cookStatusMessage) {
                         cookStatusMessage.textContent = data.message || 'Recipe marked as cooked.';
                     }
+                    showGlobalMessage('Recipe marked as cooked successfully.', 'success');
                 } else {
                     if (cookStatusMessage) {
                         cookStatusMessage.textContent = data.message || 'Action failed.';
                     }
+                    showGlobalMessage(data.message || 'Failed to mark recipe as cooked.', 'danger');
                 }
             })
             .catch(function (error) {
@@ -71,7 +119,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (cookStatusMessage) {
                     cookStatusMessage.textContent = 'Something went wrong.';
                 }
+                showGlobalMessage('Something went wrong while updating the recipe.', 'danger');
             });
-        });
-    }
+        }
+    });
 });

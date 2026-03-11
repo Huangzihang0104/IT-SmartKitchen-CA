@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
             <i class="bi bi-basket2-fill me-2"></i>SmartKitchen
         </a>
 
@@ -11,16 +11,32 @@
         <div class="collapse navbar-collapse" id="mainNavbar">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active fw-semibold{% endif %}"
+                       {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %}
+                       href="{% url 'home' %}">
+                        Home
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/dashboard/">Inventory</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active fw-semibold{% endif %}"
+                       {% if request.resolver_match.url_name == 'dashboard' %}aria-current="page"{% endif %}
+                       href="{% url 'dashboard' %}">
+                        Inventory
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/recipe/">Recipes</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'recipe_list' or request.resolver_match.url_name == 'recipe_detail' %}active fw-semibold{% endif %}"
+                       {% if request.resolver_match.url_name == 'recipe_list' or request.resolver_match.url_name == 'recipe_detail' %}aria-current="page"{% endif %}
+                       href="{% url 'recipe_list' %}">
+                        Recipes
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login/">Login</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'login' or request.resolver_match.url_name == 'register' %}active fw-semibold{% endif %}"
+                       {% if request.resolver_match.url_name == 'login' or request.resolver_match.url_name == 'register' %}aria-current="page"{% endif %}
+                       href="{% url 'login' %}">
+                        Login
+                    </a>
                 </li>
             </ul>
         </div>
