@@ -1,0 +1,136 @@
+{% extends 'kitchen/base.html' %}
+
+{% block title %}Home | SmartKitchen{% endblock %}
+
+{% block content %}
+<div class="hero-card mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <div class="small text-uppercase fw-semibold mb-3 text-white-50">Smart kitchen management</div>
+            <h1 class="display-5 fw-bold mb-3">Cook smarter. Waste less. Save more.</h1>
+            <p class="lead mb-4">
+                SmartKitchen helps you track ingredients, discover recipes you can cook right now, and reduce food waste before items expire.
+            </p>
+
+            <div class="d-flex flex-wrap gap-3 mb-4">
+                <a href="{% url 'register' %}" class="btn btn-light btn-lg">Get Started</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">Log In</a>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-light text-success px-3 py-2">Inventory Tracking</span>
+                <span class="badge bg-light text-success px-3 py-2">70%+ Recipe Match</span>
+                <span class="badge bg-light text-success px-3 py-2">Expiry Awareness</span>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 text-dark">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <div class="fw-bold">Kitchen Snapshot</div>
+                            <div class="text-muted small">Live overview</div>
+                        </div>
+                        <span class="badge bg-success-subtle text-success">Today</span>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <div class="rounded-4 p-3 bg-light">
+                                <div class="text-muted small">Ingredients</div>
+                                <div class="h4 fw-bold mb-0">24</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="rounded-4 p-3 bg-light">
+                                <div class="text-muted small">Recipes Matched</div>
+                                <div class="h4 fw-bold mb-0">12</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-4 p-3 bg-light mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="fw-semibold">Milk</div>
+                                <div class="small text-muted">Expires soon</div>
+                            </div>
+                            <span class="badge badge-soft-warning">Priority</span>
+                        </div>
+                    </div>
+
+                    <div class="rounded-4 p-3 bg-light mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="fw-semibold">Best recipe match</div>
+                                <div class="small text-muted">Creamy Mushroom Pasta</div>
+                            </div>
+                            <span class="badge badge-soft-success">85%</span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'dashboard' %}" class="btn btn-success">Open Dashboard</a>
+                        <a href="{% url 'recipe_list' %}" class="btn btn-outline-secondary">Browse Recipes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card p-4 h-100">
+            <div class="mb-3 fs-1">🥬</div>
+            <h2 class="h4 fw-bold">Inventory Tracking</h2>
+            <p class="text-muted mb-0">
+                Keep your pantry and fridge organised with ingredient names, quantities, units, and expiry dates.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card p-4 h-100">
+            <div class="mb-3 fs-1">🍳</div>
+            <h2 class="h4 fw-bold">Recipe Matching</h2>
+            <p class="text-muted mb-0">
+                Discover meals based on what is already in stock, ranked by ingredient match and cooking convenience.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card p-4 h-100">
+            <div class="mb-3 fs-1">⏰</div>
+            <h2 class="h4 fw-bold">Expiry Awareness</h2>
+            <p class="text-muted mb-0">
+                Spot ingredients that are close to expiry so you can use them first and avoid unnecessary waste.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-12 col-lg-6">
+        <div class="card p-4 h-100">
+            <h2 class="h4 fw-bold mb-3">Start with your inventory</h2>
+            <p class="text-muted">
+                Add ingredients to your dashboard and keep your kitchen data accurate across sessions.
+            </p>
+            <a href="{% url 'dashboard' %}" class="btn btn-success">Go to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <div class="card p-4 h-100">
+            <h2 class="h4 fw-bold mb-3">Explore recommended recipes</h2>
+            <p class="text-muted">
+                Filter by cooking time, difficulty, and dietary needs to find a suitable meal fast.
+            </p>
+            <a href="{% url 'recipe_list' %}" class="btn btn-success">Browse Recipes</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
