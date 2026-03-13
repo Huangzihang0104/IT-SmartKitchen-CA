@@ -1,5 +1,10 @@
+from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+from .forms import CustomUserCreationForm
 
 
 def home(request):
@@ -7,11 +12,30 @@ def home(request):
 
 
 def login_view(request):
-    return render(request, 'kitchen/auth/login.html')
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            messages.success(request, 'Logged in successfully.')
+            return redirect('dashboard')
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'kitchen/auth/login.html', {'form': form})
 
 
 def register_view(request):
-    return render(request, 'kitchen/auth/register.html')
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Account created successfully.')
+            return redirect('dashboard')
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'kitchen/auth/register.html', {'form': form})
 
 
 def dashboard_view(request):

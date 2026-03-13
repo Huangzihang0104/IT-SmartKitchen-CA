@@ -11,6 +11,14 @@
                 <p class="text-muted mb-0">Start tracking ingredients and reducing food waste.</p>
             </div>
 
+            {% if form and form.non_field_errors %}
+                <div class="alert alert-danger rounded-4" role="alert" aria-live="polite" aria-atomic="true">
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <form method="post" action="{% url 'register' %}" novalidate>
                 {% csrf_token %}
 
@@ -20,10 +28,18 @@
                         type="text"
                         name="username"
                         id="id_username"
-                        class="form-control"
+                        class="form-control{% if form and form.username.errors %} is-invalid{% endif %}"
                         autocomplete="username"
+                        value="{% if form %}{{ form.username.value|default:'' }}{% endif %}"
                         required
                         aria-required="true">
+                    {% if form and form.username.errors %}
+                        <div class="invalid-feedback d-block" role="alert">
+                            {% for error in form.username.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="mb-3">
@@ -32,10 +48,18 @@
                         type="email"
                         name="email"
                         id="id_email"
-                        class="form-control"
+                        class="form-control{% if form and form.email.errors %} is-invalid{% endif %}"
                         autocomplete="email"
+                        value="{% if form %}{{ form.email.value|default:'' }}{% endif %}"
                         required
                         aria-required="true">
+                    {% if form and form.email.errors %}
+                        <div class="invalid-feedback d-block" role="alert">
+                            {% for error in form.email.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="mb-3">
@@ -44,10 +68,17 @@
                         type="password"
                         name="password1"
                         id="id_password1"
-                        class="form-control"
+                        class="form-control{% if form and form.password1.errors %} is-invalid{% endif %}"
                         autocomplete="new-password"
                         required
                         aria-required="true">
+                    {% if form and form.password1.errors %}
+                        <div class="invalid-feedback d-block" role="alert">
+                            {% for error in form.password1.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="mb-3">
@@ -56,10 +87,17 @@
                         type="password"
                         name="password2"
                         id="id_password2"
-                        class="form-control"
+                        class="form-control{% if form and form.password2.errors %} is-invalid{% endif %}"
                         autocomplete="new-password"
                         required
                         aria-required="true">
+                    {% if form and form.password2.errors %}
+                        <div class="invalid-feedback d-block" role="alert">
+                            {% for error in form.password2.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <button type="submit" class="btn btn-success w-100">Sign Up</button>
