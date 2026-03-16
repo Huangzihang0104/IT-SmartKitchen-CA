@@ -19,39 +19,19 @@
     <div class="col-12 col-lg-4">
         <div class="card p-4">
             <h2 class="section-title h4">Add Ingredient</h2>
-
-            <form>
+            
+            <form method="POST" action="{% url 'add_inventory' %}">
                 {% csrf_token %}
-
-                <div class="mb-3">
-                    <label for="name" class="form-label">Ingredient Name</label>
-                    <input type="text" id="name" class="form-control" placeholder="e.g. Tomato">
-                </div>
-
-                <div class="mb-3">
-                    <label for="quantity" class="form-label">Quantity</label>
-                    <input type="number" id="quantity" class="form-control" placeholder="e.g. 2">
-                </div>
-
-                <div class="mb-3">
-                    <label for="unit" class="form-label">Unit</label>
-                    <input type="text" id="unit" class="form-control" placeholder="e.g. pcs, g, ml">
-                </div>
-
-                <div class="mb-3">
-                    <label for="expiry_date" class="form-label">Expiry Date</label>
-                    <input type="text" id="expiry_date" class="form-control" placeholder="YYYY-MM-DD">
-                </div>
-
-                <button type="button" class="btn btn-success w-100">Add Ingredient</button>
+                
+                {{ form.as_p }}
+                
+                <button type="submit" class="btn btn-success w-100 mt-3">Add Ingredient</button>
             </form>
         </div>
     </div>
 
     <div class="col-12 col-lg-8">
         <div class="card p-4">
-            <h2 class="section-title h4">My Inventory</h2>
-
             <div class="table-responsive d-none d-md-block">
                 <table class="table align-middle">
                     <thead>
@@ -59,126 +39,27 @@
                             <th>Name</th>
                             <th>Qty</th>
                             <th>Expiry</th>
-                            <th>Status</th>
                             <th class="text-end">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="inventory-table-body">
-                        <tr data-ingredient-id="1">
-                            <td>Milk</td>
-                            <td>1 bottle</td>
-                            <td>2026-03-13</td>
-                            <td><span class="badge badge-soft-warning">Expiring Soon</span></td>
+                    <tbody>
+                        {% for item in inventory_list %}
+                        <tr data-ingredient-id="{{ item.id }}">
+                            <td class="fw-bold">{{ item.ingredient.name }}</td>
+                            <td>{{ item.quantity }} {{ item.ingredient.unit }}</td>
+                            <td>{{ item.expiry_date|date:"Y-m-d" }}</td>
                             <td class="text-end">
-                                <button type="button" class="btn btn-outline-secondary btn-sm">Edit</button>
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-danger btn-sm delete-ingredient-btn"
-                                    data-id="1"
-                                    data-url="{% url 'delete_ingredient' 1 %}">
-                                    Delete
-                                </button>
+                                <a href="{% url 'edit_inventory' item.id %}" class="btn btn-outline-secondary btn-sm">Edit</a>
+                                <button type="button" class="btn btn-outline-danger btn-sm delete-ingredient-btn" data-id="{{ item.id }}" data-url="{% url 'delete_ingredient' item.id %}">Delete</button>
                             </td>
                         </tr>
-                        <tr data-ingredient-id="2">
-                            <td>Eggs</td>
-                            <td>6 pcs</td>
-                            <td>2026-03-18</td>
-                            <td><span class="badge badge-soft-success">Fresh</span></td>
-                            <td class="text-end">
-                                <button type="button" class="btn btn-outline-secondary btn-sm">Edit</button>
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-danger btn-sm delete-ingredient-btn"
-                                    data-id="2"
-                                    data-url="{% url 'delete_ingredient' 2 %}">
-                                    Delete
-                                </button>
-                            </td>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">Your fridge is empty. Add some ingredients!</td>
                         </tr>
-                        <tr data-ingredient-id="3">
-                            <td>Spinach</td>
-                            <td>200 g</td>
-                            <td>2026-03-10</td>
-                            <td><span class="badge badge-soft-danger">Expired</span></td>
-                            <td class="text-end">
-                                <button type="button" class="btn btn-outline-secondary btn-sm">Edit</button>
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-danger btn-sm delete-ingredient-btn"
-                                    data-id="3"
-                                    data-url="{% url 'delete_ingredient' 3 %}">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
-            </div>
-
-            <div id="inventory-mobile-list" class="d-md-none">
-                <div class="card p-3 mb-3" data-ingredient-id="1">
-                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                        <div>
-                            <div class="fw-bold">Milk</div>
-                            <div class="text-muted small">1 bottle</div>
-                        </div>
-                        <span class="badge badge-soft-warning">Expiring Soon</span>
-                    </div>
-                    <div class="small text-muted mb-3">Expiry: 2026-03-13</div>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-outline-secondary btn-sm flex-fill">Edit</button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-danger btn-sm flex-fill delete-ingredient-btn"
-                            data-id="1"
-                            data-url="{% url 'delete_ingredient' 1 %}">
-                            Delete
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card p-3 mb-3" data-ingredient-id="2">
-                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                        <div>
-                            <div class="fw-bold">Eggs</div>
-                            <div class="text-muted small">6 pcs</div>
-                        </div>
-                        <span class="badge badge-soft-success">Fresh</span>
-                    </div>
-                    <div class="small text-muted mb-3">Expiry: 2026-03-18</div>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-outline-secondary btn-sm flex-fill">Edit</button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-danger btn-sm flex-fill delete-ingredient-btn"
-                            data-id="2"
-                            data-url="{% url 'delete_ingredient' 2 %}">
-                            Delete
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card p-3" data-ingredient-id="3">
-                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                        <div>
-                            <div class="fw-bold">Spinach</div>
-                            <div class="text-muted small">200 g</div>
-                        </div>
-                        <span class="badge badge-soft-danger">Expired</span>
-                    </div>
-                    <div class="small text-muted mb-3">Expiry: 2026-03-10</div>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-outline-secondary btn-sm flex-fill">Edit</button>
-                        <button
-                            type="button"
-                            class="btn btn-outline-danger btn-sm flex-fill delete-ingredient-btn"
-                            data-id="3"
-                            data-url="{% url 'delete_ingredient' 3 %}">
-                            Delete
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
