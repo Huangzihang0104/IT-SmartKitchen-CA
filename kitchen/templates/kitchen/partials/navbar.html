@@ -9,35 +9,37 @@
         </button>
 
         <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active fw-semibold{% endif %}"
-                       {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %}
-                       href="{% url 'home' %}">
-                        Home
-                    </a>
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active fw-semibold{% endif %}"
-                       {% if request.resolver_match.url_name == 'dashboard' %}aria-current="page"{% endif %}
-                       href="{% url 'dashboard' %}">
-                        Inventory
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'recipe_list' or request.resolver_match.url_name == 'recipe_detail' %}active fw-semibold{% endif %}"
-                       {% if request.resolver_match.url_name == 'recipe_list' or request.resolver_match.url_name == 'recipe_detail' %}aria-current="page"{% endif %}
-                       href="{% url 'recipe_list' %}">
-                        Recipes
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'login' or request.resolver_match.url_name == 'register' %}active fw-semibold{% endif %}"
-                       {% if request.resolver_match.url_name == 'login' or request.resolver_match.url_name == 'register' %}aria-current="page"{% endif %}
-                       href="{% url 'login' %}">
-                        Login
-                    </a>
-                </li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">Inventory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'recipe_list' %}">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-icon-link" href="#" aria-label="Notifications">
+                            <i class="bi bi-bell"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link btn btn-link p-0 border-0">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'recipe_list' %}">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
