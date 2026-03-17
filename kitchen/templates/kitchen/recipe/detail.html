@@ -41,16 +41,19 @@
                         class="small text-success" 
                         role="status" 
                         aria-live="polite" 
-                        aria-atomic="true"></div>
+                        aria-atomic="true">
+                    </div>
                 </div>
             </div>
 
             <h2 class="h5 mt-4">Ingredients</h2>
             <ul class="list-group list-group-flush mt-3">
-                {% for req in ingredients %}
+                {% for ri in recipe.required_ingredients.all %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ req.ingredient.name }}
-                        <span class="badge bg-secondary rounded-pill">{{ req.quantity_required }} {{ req.ingredient.unit }}</span>
+                        {{ ri.ingredient.name }}
+                        <span class="badge bg-primary rounded-pill">
+                            {{ ri.quantity_required }} {{ ri.ingredient.unit }}
+                        </span>
                     </li>
                 {% empty %}
                     <li class="list-group-item">No ingredients listed yet.</li>
