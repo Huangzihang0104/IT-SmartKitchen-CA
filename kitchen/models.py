@@ -32,6 +32,7 @@ class Recipe(models.Model):
     instructions = models.TextField()
     difficulty = models.CharField(max_length=32, null=True, blank=True)
     cook_time = models.IntegerField(help_text="Cook time in minutes")
+    image_url = models.URLField(max_length=1024, blank=True, null=True)
 
     def __str__(self):
         return self.name

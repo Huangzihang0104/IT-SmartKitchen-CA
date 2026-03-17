@@ -61,109 +61,89 @@
 </div>
 
 <div class="card featured-recipe-card p-4 p-lg-5 mb-5">
-    <div class="row g-4 align-items-center">
-        <div class="col-12 col-lg-6">
-            <div class="recipe-thumb recipe-thumb-pasta">
-                <div class="recipe-thumb-content">
-                    <span class="recipe-thumb-label">Featured recommendation</span>
-                    <p class="recipe-thumb-title">Creamy Mushroom Pasta</p>
-                </div>
+    {% if recipe_data_list %}
+    {% with best_match=recipe_data_list.0 %}
+    <div class="card featured-recipe-card p-4 p-lg-5 mb-5 border-0 shadow-sm" style="background-color: #fff; border-radius: 16px;">
+        <div class="row g-4 align-items-center">
+            
+            <div class="col-12 col-lg-6">
+                {% if best_match.recipe.image_url %}
+                    <div style="border-radius: 12px; height: 300px; background-image: url('{{ best_match.recipe.image_url }}'); background-size: cover; background-position: center;"></div>
+                {% else %}
+                    <div class="bg-dark text-white d-flex align-items-center justify-content-center" style="border-radius: 12px; height: 300px;">
+                        <h3 class="fw-bold">{{ best_match.recipe.name }}</h3>
+                    </div>
+                {% endif %}
             </div>
-        </div>
 
-        <div class="col-12 col-lg-6">
-            <div class="featured-recipe-copy">
-                <div class="small text-uppercase text-success fw-semibold mb-2">Best match today</div>
-                <h2 class="display-6 fw-bold mb-3">Creamy Mushroom Pasta</h2>
-                <p class="recipe-meta mb-3">25 mins · Easy · Vegetarian · 85% match</p>
-                <p class="mb-4">
-                    A quick, creamy pasta dish that makes excellent use of mushrooms, garlic, and ingredients already in your kitchen.
-                </p>
-
-                <div class="d-flex flex-wrap gap-2 mb-4">
-                    <span class="badge badge-soft-warning">Uses expiring milk</span>
-                    <span class="badge badge-soft-success">Weeknight friendly</span>
+            <div class="col-12 col-lg-6">
+                <div class="featured-recipe-copy">
+                    <div class="small text-uppercase text-success fw-bold mb-2">Best Match Today</div>
+                    <h2 class="display-6 fw-bold mb-3">{{ best_match.recipe.name }}</h2>
+                    <p class="recipe-meta mb-3 text-muted">
+                        {{ best_match.recipe.prep_time }} mins · <span class="text-success fw-bold">{{ best_match.match_percentage }}% match</span>
+                    </p>
+                    <p class="mb-4" style="line-height: 1.6;">
+                        A perfect choice for today! You currently have <strong>{{ best_match.have_count }}</strong> out of <strong>{{ best_match.total_required }}</strong> ingredients needed to cook this right now.
+                    </p>
+                    
+                    <a href="{% url 'recipe_detail' best_match.recipe.id %}" class="btn btn-success px-4 py-2 fw-semibold">View Recipe</a>
                 </div>
-
-                <a href="{% url 'recipe_detail' %}" class="btn btn-success px-4">View Recipe</a>
             </div>
         </div>
     </div>
 </div>
-
+{% endwith %}
+    {% endif %}
+    
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <h2 class="h3 fw-bold mb-0">More recipes you can make</h2>
     <span class="text-muted">3 results</span>
 </div>
 
 <div class="row g-4">
+    {% for data in recipe_data_list %}
+    
     <div class="col-12 col-md-6 col-xl-4">
         <div class="card h-100 overflow-hidden">
             <div class="p-3">
-                <div class="recipe-thumb recipe-thumb-omelette">
-                    <div class="recipe-thumb-content">
-                        <span class="recipe-thumb-label">Quick & fresh</span>
-                        <p class="recipe-thumb-title">Spinach Omelette</p>
+                <div class="recipe-thumb bg-secondary text-white d-flex align-items-center justify-content-center" style="border-radius: 8px; min-height: 180px;">
+                    <div class="recipe-thumb-content text-center">
+                        <p class="recipe-thumb-title fs-4 fw-bold mb-0">{{ data.recipe.name }}</p>
                     </div>
                 </div>
             </div>
+            
             <div class="card-body pt-0">
-                <h3 class="h4 fw-bold">Spinach Omelette</h3>
-                <p class="recipe-meta mb-2">15 mins · Easy · High Protein</p>
-                <p class="mb-3">An efficient way to use eggs and spinach before they expire.</p>
+                <h3 class="h4 fw-bold">{{ data.recipe.name }}</h3>
+                
+                <p class="recipe-meta mb-2">
+                    Ingredients: {{ data.have_count }} / {{ data.total_required }}
+                </p>
+                <p class="mb-3 small">
+                    {% if data.missing_count > 0 %}
+                        <span class="text-danger fw-semibold">Missing {{ data.missing_count }} item(s)</span>
+                    {% else %}
+                        <span class="text-success fw-semibold">Ready to cook!</span>
+                    {% endif %}
+                </p>
+                
                 <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge badge-soft-success">92% Match</span>
-                    <span class="badge badge-soft-danger">Spinach expiring</span>
+                    <span class="badge {% if data.match_percentage == 100 %}badge-soft-success{% elif data.match_percentage >= 50 %}badge-soft-warning{% else %}badge-soft-danger{% endif %}">
+                        {{ data.match_percentage }}% Match
+                    </span>
                 </div>
-                <a href="{% url 'recipe_detail' %}" class="btn btn-success w-100">View Details</a>
+                
+                <a href="{% url 'recipe_detail' data.recipe.id %}" class="btn btn-success w-100">View Details</a>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card h-100 overflow-hidden">
-            <div class="p-3">
-                <div class="recipe-thumb recipe-thumb-rice">
-                    <div class="recipe-thumb-content">
-                        <span class="recipe-thumb-label">Pantry friendly</span>
-                        <p class="recipe-thumb-title">Garlic Fried Rice</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body pt-0">
-                <h3 class="h4 fw-bold">Garlic Fried Rice</h3>
-                <p class="recipe-meta mb-2">20 mins · Medium · Dairy Free</p>
-                <p class="mb-3">A flexible recipe ideal for leftover rice and quick weeknight cooking.</p>
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge badge-soft-success">78% Match</span>
-                    <span class="badge badge-soft-success">Good pantry fit</span>
-                </div>
-                <a href="{% url 'recipe_detail' %}" class="btn btn-success w-100">View Details</a>
-            </div>
-        </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <p class="text-muted">No recipes found. Please add some to the database.</p>
     </div>
-
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card h-100 overflow-hidden">
-            <div class="p-3">
-                <div class="recipe-thumb recipe-thumb-bake">
-                    <div class="recipe-thumb-content">
-                        <span class="recipe-thumb-label">Comfort food</span>
-                        <p class="recipe-thumb-title">Tomato Pasta Bake</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body pt-0">
-                <h3 class="h4 fw-bold">Tomato Pasta Bake</h3>
-                <p class="recipe-meta mb-2">30 mins · Easy · Family Style</p>
-                <p class="mb-3">A simple baked pasta dish that works well with staple cupboard ingredients.</p>
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge badge-soft-success">74% Match</span>
-                    <span class="badge badge-soft-warning">Great for leftovers</span>
-                </div>
-                <a href="{% url 'recipe_detail' %}" class="btn btn-success w-100">View Details</a>
-            </div>
-        </div>
-    </div>
+    
+    {% endfor %}
 </div>
 {% endblock %}
