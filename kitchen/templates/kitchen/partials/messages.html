@@ -1,11 +1,17 @@
+<!-- Flash messages from Django's messages framework -->
+<!-- aria-live="polite" ensures screen readers announce dynamic updates (WCAG 3.3.1) -->
 {% if messages %}
     <div class="mb-3" aria-live="polite" aria-atomic="true">
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags|default:'info' }} rounded-4 shadow-sm mb-2" role="status">
+            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show rounded-4 shadow-sm mb-2"
+                 role="status">
                 {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                        aria-label="Close notification"></button>
             </div>
         {% endfor %}
     </div>
 {% endif %}
 
+<!-- Container for JS-driven status messages (e.g. AJAX feedback) -->
 <div id="global-status-message" class="mb-3" aria-live="polite" aria-atomic="true"></div>

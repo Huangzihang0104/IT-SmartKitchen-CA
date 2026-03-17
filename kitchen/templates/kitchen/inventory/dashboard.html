@@ -10,7 +10,9 @@
             <p class="mb-0">Track ingredients, monitor expiry dates, and reduce food waste.</p>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-            <span id="inventory-count-badge" class="badge bg-light text-success fs-6">Total items: 3</span>
+            <span id="inventory-count-badge" class="badge bg-light text-success fs-6">
+                Total items: {{ inventory_items|length|default:"0" }}
+            </span>
         </div>
     </div>
 </div>
@@ -19,47 +21,191 @@
     <div class="col-12 col-lg-4">
         <div class="card p-4">
             <h2 class="section-title h4">Add Ingredient</h2>
-            
-            <form method="POST" action="{% url 'add_inventory' %}">
+
+            <form id="add-ingredient-form" novalidate>
                 {% csrf_token %}
-                
-                {{ form.as_p }}
-                
-                <button type="submit" class="btn btn-success w-100 mt-3">Add Ingredient</button>
+
+                <div class="mb-3">
+                    <label for="ingredient-name" class="form-label">Ingredient Name</label>
+                    <input type="text" id="ingredient-name" class="form-control"
+                           placeholder="e.g. Tomato" required aria-required="true">
+                    <div class="invalid-feedback">Please enter an ingredient name.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ingredient-quantity" class="form-label">Quantity</label>
+                    <input type="number" id="ingredient-quantity" class="form-control"
+                           placeholder="e.g. 2" min="0.1" step="0.1" required aria-required="true">
+                    <div class="invalid-feedback">Please enter a valid quantity.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ingredient-unit" class="form-label">Unit</label>
+                    <select id="ingredient-unit" class="form-select" aria-label="Measurement unit">
+                        <option value="pcs">pcs</option>
+                        <option value="g">g</option>
+                        <option value="kg">kg</option>
+                        <option value="ml">ml</option>
+                        <option value="L">L</option>
+                        <option value="bottle">bottle</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ingredient-expiry" class="form-label">Expiry Date</label>
+                    <input type="date" id="ingredient-expiry" class="form-control"
+                           required aria-required="true">
+                    <div class="invalid-feedback">Please select an expiry date.</div>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100" id="add-ingredient-btn">
+                    <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>Add Ingredient
+                </button>
             </form>
         </div>
     </div>
 
     <div class="col-12 col-lg-8">
         <div class="card p-4">
+            <h2 class="section-title h4">My Inventory</h2>
+
             <div class="table-responsive d-none d-md-block">
-                <table class="table align-middle">
+                <table class="table align-middle" aria-label="Inventory items">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Qty</th>
-                            <th>Expiry</th>
-                            <th class="text-end">Actions</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Expiry</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-end">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for item in inventory_list %}
+                    <tbody id="inventory-table-body">
+                        {% for item in inventory_items %}
                         <tr data-ingredient-id="{{ item.id }}">
-                            <td class="fw-bold">{{ item.ingredient.name }}</td>
-                            <td>{{ item.quantity }} {{ item.ingredient.unit }}</td>
-                            <td>{{ item.expiry_date|date:"Y-m-d" }}</td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.quantity }} {{ item.unit }}</td>
+                            <td>{{ item.expiry_date }}</td>
+                            <td>
+                                <span class="badge badge-soft-{{ item.status_class }}">
+                                    {{ item.status_label }}
+                                </span>
+                            </td>
                             <td class="text-end">
-                                <a href="{% url 'edit_inventory' item.id %}" class="btn btn-outline-secondary btn-sm">Edit</a>
-                                <button type="button" class="btn btn-outline-danger btn-sm delete-ingredient-btn" data-id="{{ item.id }}" data-url="{% url 'delete_ingredient' item.id %}">Delete</button>
+                                <button type="button"
+                                        class="btn btn-outline-secondary btn-sm edit-ingredient-btn"
+                                        data-id="{{ item.id }}"
+                                        data-name="{{ item.name }}"
+                                        data-quantity="{{ item.quantity }}"
+                                        data-unit="{{ item.unit }}"
+                                        data-expiry="{{ item.expiry_date }}"
+                                        aria-label="Edit {{ item.name }}">
+                                    <i class="bi bi-pencil" aria-hidden="true"></i> Edit
+                                </button>
+                                <button type="button"
+                                        class="btn btn-outline-danger btn-sm delete-ingredient-btn"
+                                        data-id="{{ item.id }}"
+                                        data-name="{{ item.name }}"
+                                        aria-label="Delete {{ item.name }}">
+                                    <i class="bi bi-trash" aria-hidden="true"></i> Delete
+                                </button>
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="4" class="text-center text-muted py-4">Your fridge is empty. Add some ingredients!</td>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                No ingredients in your inventory yet. Add one to get started!
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+            </div>
+
+            <div id="inventory-mobile-list" class="d-md-none">
+                {% for item in inventory_items %}
+                <div class="card p-3 mb-3 inventory-mobile-card" data-ingredient-id="{{ item.id }}">
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                        <div>
+                            <div class="fw-bold">{{ item.name }}</div>
+                            <div class="text-muted small">{{ item.quantity }} {{ item.unit }}</div>
+                        </div>
+                        <span class="badge badge-soft-{{ item.status_class }}">
+                            {{ item.status_label }}
+                        </span>
+                    </div>
+                    <div class="small text-muted mb-3">Expiry: {{ item.expiry_date }}</div>
+                    <div class="d-flex gap-2">
+                        <button type="button"
+                                class="btn btn-outline-secondary btn-sm flex-fill edit-ingredient-btn"
+                                data-id="{{ item.id }}"
+                                data-name="{{ item.name }}"
+                                data-quantity="{{ item.quantity }}"
+                                data-unit="{{ item.unit }}"
+                                data-expiry="{{ item.expiry_date }}"
+                                aria-label="Edit {{ item.name }}">
+                            Edit
+                        </button>
+                        <button type="button"
+                                class="btn btn-outline-danger btn-sm flex-fill delete-ingredient-btn"
+                                data-id="{{ item.id }}"
+                                data-name="{{ item.name }}"
+                                aria-label="Delete {{ item.name }}">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center text-muted py-4">
+                    No ingredients in your inventory yet. Add one to get started!
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editIngredientModal" tabindex="-1"
+     aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header border-0">
+                <h3 class="modal-title h5 fw-bold" id="editModalLabel">Edit Ingredient</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-ingredient-form" novalidate>
+                    <input type="hidden" id="edit-id">
+                    <div class="mb-3">
+                        <label for="edit-name" class="form-label">Name</label>
+                        <input type="text" id="edit-name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-quantity" class="form-label">Quantity</label>
+                        <input type="number" id="edit-quantity" class="form-control"
+                               min="0.1" step="0.1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-unit" class="form-label">Unit</label>
+                        <select id="edit-unit" class="form-select">
+                            <option value="pcs">pcs</option>
+                            <option value="g">g</option>
+                            <option value="kg">kg</option>
+                            <option value="ml">ml</option>
+                            <option value="L">L</option>
+                            <option value="bottle">bottle</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-expiry" class="form-label">Expiry Date</label>
+                        <input type="date" id="edit-expiry" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="save-edit-btn">Save Changes</button>
             </div>
         </div>
     </div>

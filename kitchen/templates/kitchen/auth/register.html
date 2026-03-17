@@ -12,14 +12,16 @@
             </div>
 
             {% if form and form.non_field_errors %}
-                <div class="alert alert-danger rounded-4" role="alert" aria-live="polite" aria-atomic="true">
+                <div class="alert alert-danger rounded-4" role="alert"
+                     aria-live="polite" aria-atomic="true">
                     {% for error in form.non_field_errors %}
                         <div>{{ error }}</div>
                     {% endfor %}
                 </div>
             {% endif %}
 
-            <form method="post" action="{% url 'register' %}" novalidate>
+            <!-- Registration form: named URL action, novalidate to use server-side + JS validation -->
+            <form method="post" action="{% url 'register' %}" novalidate id="register-form">
                 {% csrf_token %}
 
                 <div class="mb-3">
@@ -32,12 +34,7 @@
                         autocomplete="username"
                         value="{% if form %}{{ form.username.value|default:'' }}{% endif %}"
                         required
-                        aria-required="true"
-                        aria-invalid="{% if form and form.username.errors %}true{% else %}false{% endif %}"
-                        aria-describedby="usernameHelp {% if form and form.username.errors %}usernameError{% endif %}">
-                    <div id="usernameHelp" class="form-text">
-                        Choose a unique username for your account.
-                    </div>
+                        aria-required="true">
                     {% if form and form.username.errors %}
                         <div id="usernameError" class="invalid-feedback d-block" role="alert">
                             {% for error in form.username.errors %}
@@ -57,12 +54,7 @@
                         autocomplete="email"
                         value="{% if form %}{{ form.email.value|default:'' }}{% endif %}"
                         required
-                        aria-required="true"
-                        aria-invalid="{% if form and form.email.errors %}true{% else %}false{% endif %}"
-                        aria-describedby="emailHelp {% if form and form.email.errors %}emailError{% endif %}">
-                    <div id="emailHelp" class="form-text">
-                        Enter a valid email address.
-                    </div>
+                        aria-required="true">
                     {% if form and form.email.errors %}
                         <div id="emailError" class="invalid-feedback d-block" role="alert">
                             {% for error in form.email.errors %}
@@ -81,12 +73,7 @@
                         class="form-control{% if form and form.password1.errors %} is-invalid{% endif %}"
                         autocomplete="new-password"
                         required
-                        aria-required="true"
-                        aria-invalid="{% if form and form.password1.errors %}true{% else %}false{% endif %}"
-                        aria-describedby="password1Help {% if form and form.password1.errors %}password1Error{% endif %}">
-                    <div id="password1Help" class="form-text">
-                        Password must be at least 8 characters and should not be too common.
-                    </div>
+                        aria-required="true">
                     {% if form and form.password1.errors %}
                         <div id="password1Error" class="invalid-feedback d-block" role="alert">
                             {% for error in form.password1.errors %}
@@ -105,12 +92,7 @@
                         class="form-control{% if form and form.password2.errors %} is-invalid{% endif %}"
                         autocomplete="new-password"
                         required
-                        aria-required="true"
-                        aria-invalid="{% if form and form.password2.errors %}true{% else %}false{% endif %}"
-                        aria-describedby="password2Help {% if form and form.password2.errors %}password2Error{% endif %}">
-                    <div id="password2Help" class="form-text">
-                        Re-enter the same password to confirm it.
-                    </div>
+                        aria-required="true">
                     {% if form and form.password2.errors %}
                         <div id="password2Error" class="invalid-feedback d-block" role="alert">
                             {% for error in form.password2.errors %}
@@ -120,9 +102,7 @@
                     {% endif %}
                 </div>
 
-                <button type="submit" class="btn btn-success w-100" aria-label="Create your SmartKitchen account">
-                    Sign Up
-                </button>
+                <button type="submit" class="btn btn-success w-100">Sign Up</button>
             </form>
 
             <p class="text-center mt-3 mb-0">

@@ -1,8 +1,21 @@
+/* ================================================================
+   SmartKitchen — Custom Stylesheet
+   Purpose: brand-specific styles layered on top of Bootstrap 5.
+   Organisation: base → components → layout → pages → utilities
+   ================================================================ */
+
+
+/* ── 1. BASE: Global typography and background ── */
+
 body {
-    background-color: #f6f4ef;
+    background-color: #f6f4ef;   /* warm neutral — reduces eye strain vs pure white */
     color: #1f1f1f;
 }
 
+
+/* ── 2. COMPONENTS: Reusable UI elements ── */
+
+/* Cards: rounded corners with subtle shadow for depth */
 .card {
     border: 1px solid #ece7de;
     border-radius: 1rem;
@@ -10,10 +23,12 @@ body {
     background-color: #ffffff;
 }
 
+/* Buttons: pill-shaped for a modern, friendly look */
 .btn {
     border-radius: 999px;
 }
 
+/* Form controls: consistent rounding and border colour */
 .form-control,
 .form-select {
     border-radius: 0.85rem;
@@ -21,27 +36,23 @@ body {
     background-color: #fff;
 }
 
+/* Focus states: visible 2px green outline for keyboard navigation (WCAG 2.4.11) */
 .form-control:focus,
 .form-select:focus,
-.btn:focus {
+.btn:focus-visible {
     outline: 2px solid #198754;
     outline-offset: 2px;
     box-shadow: none;
 }
 
+/* Section titles used in card headers */
 .section-title {
     font-weight: 700;
     margin-bottom: 1rem;
 }
 
-.hero-card {
-    background: linear-gradient(135deg, #1f6a43, #2f8f61);
-    color: white;
-    border-radius: 1.25rem;
-    padding: 2rem;
-    border: none;
-}
-
+/* Soft status badges: low-contrast, accessible colour pairs */
+/* Each pair meets ≥4.5:1 contrast ratio (WCAG 1.4.3) */
 .badge-soft-success {
     background-color: #dcefe4;
     color: #24523a;
@@ -57,28 +68,170 @@ body {
     color: #8c2f2a;
 }
 
-.table td,
-.table th {
-    vertical-align: middle;
-}
-
-.recipe-image {
-    width: 100%;
-    max-height: 360px;
-    object-fit: cover;
-    border-radius: 1rem;
-}
-
-.recipe-placeholder {
-    min-height: 320px;
+/* Progress bar customisation */
+.progress {
+    border-radius: 999px;
     background-color: #ece7de;
 }
 
+
+/* ── 3. LAYOUT: Navigation, hero, footer ── */
+
+/* Skip-to-content link: only visible on keyboard focus (WCAG 2.4.1) */
+.skip-link {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    padding: 0.75rem 1.5rem;
+    background-color: #198754;
+    color: #fff;
+    border-radius: 0 0 0.5rem 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Hero banner: green gradient used on dashboard header and home page */
+.hero-card {
+    background: linear-gradient(135deg, #1f6a43, #2f8f61);
+    color: white;
+    border-radius: 1.25rem;
+    padding: 2rem;
+    border: none;
+}
+
+.hero-label {
+    letter-spacing: 0.08em;
+    opacity: 0.85;
+}
+
+/* Navbar active state: white underline to show current page */
 .navbar .nav-link.active {
     color: #ffffff !important;
     border-bottom: 2px solid rgba(255, 255, 255, 0.85);
 }
 
+/* Navbar logout button: styled as a nav link (not a typical button) */
+.nav-logout-btn {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.75);
+    font: inherit;
+    line-height: 1.5;
+    border: none;
+    padding: 0.5rem 0;
+}
+
+.nav-logout-btn:hover,
+.nav-logout-btn:focus {
+    color: #fff;
+}
+
+/* Footer: subtle divider, muted text */
+.site-footer {
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid #ece7de;
+    color: #666;
+}
+
+.footer-link {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.footer-link:hover {
+    color: #198754;
+    text-decoration: underline;
+}
+
+
+/* ── 4. PAGES: Home page specific ── */
+
+/* Feature icon blocks on home page */
+.feature-icon {
+    font-size: 2rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    background-color: #dcefe4;
+    color: #198754;
+}
+
+/* Snapshot stat cards on home hero */
+.snapshot-stat {
+    border: 1px solid #ece7de;
+    border-radius: 1rem;
+    padding: 0.75rem;
+    height: 100%;
+}
+
+
+/* ── 5. PAGES: Recipe list specific ── */
+
+/* Editorial-style heading for recipe list page */
+.editorial-heading {
+    font-size: clamp(2.2rem, 4vw, 4rem);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.editorial-subtitle {
+    font-size: 1.08rem;
+    color: #5c5c5c;
+    max-width: 760px;
+}
+
+/* Filter chips: clickable tag buttons for quick recipe filtering */
+.recipe-chip {
+    display: inline-block;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid #e7e0d5;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
+    /* WCAG 2.5.8: min 24×24 CSS px touch target */
+    min-height: 2rem;
+}
+
+.recipe-chip:hover,
+.recipe-chip:focus {
+    background-color: #dcefe4;
+    border-color: #198754;
+    outline: none;
+}
+
+.recipe-chip.active {
+    background-color: #198754;
+    color: #fff;
+    border-color: #198754;
+}
+
+/* Recipe metadata line (time · difficulty · diet) */
+.recipe-meta {
+    color: #666;
+    font-size: 0.98rem;
+}
+
+/* Featured recipe card */
+.featured-recipe-card {
+    border-radius: 1.25rem;
+    overflow: hidden;
+}
+
+.featured-recipe-copy {
+    padding: 1.25rem 0;
+}
+
+/* Recipe thumbnails: background-image containers with gradient overlay */
 .recipe-thumb {
     min-height: 280px;
     border-radius: 1rem;
@@ -89,6 +242,12 @@ body {
     transition: transform 0.2s ease;
 }
 
+/* Hover lift effect on recipe cards */
+.recipe-thumb:hover {
+    transform: scale(1.02);
+}
+
+/* Gradient overlay for text readability on images */
 .recipe-thumb::after {
     content: "";
     position: absolute;
@@ -122,65 +281,25 @@ body {
     margin: 0;
 }
 
+/* Individual recipe background images */
 .recipe-thumb-pasta {
-    background-image: url("https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=1200&q=80");
+    background-image: url("https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=75");
 }
 
 .recipe-thumb-omelette {
-    background-image: url("https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=1200&q=80");
+    background-image: url("https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=75");
 }
 
 .recipe-thumb-rice {
-    background-image: url("https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=1200&q=80");
+    background-image: url("https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=75");
 }
 
 .recipe-thumb-bake {
-    background-image: url("https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1200&q=80");
+    background-image: url("https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=75");
 }
 
-.editorial-heading {
-    font-size: clamp(2.2rem, 4vw, 4rem);
-    line-height: 1.05;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-}
 
-.editorial-subtitle {
-    font-size: 1.08rem;
-    color: #5c5c5c;
-    max-width: 760px;
-}
-
-.recipe-chip {
-    display: inline-block;
-    padding: 0.45rem 0.85rem;
-    border-radius: 999px;
-    background: #fff;
-    border: 1px solid #e7e0d5;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.recipe-meta {
-    color: #666;
-    font-size: 0.98rem;
-}
-
-.featured-recipe-card {
-    border-radius: 1.25rem;
-    overflow: hidden;
-}
-
-.featured-recipe-copy {
-    padding: 1.25rem 0;
-}
-
-.muted-divider {
-    height: 1px;
-    background: #ece7de;
-    border: none;
-    margin: 2rem 0;
-}
+/* ── 6. PAGES: Recipe detail specific ── */
 
 .recipe-detail-thumb {
     min-height: 520px;
@@ -221,5 +340,65 @@ body {
 }
 
 .recipe-detail-pasta {
-    background-image: url("https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=1200&q=80");
+    background-image: url("https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=75");
+}
+
+/* Instruction steps: spacing for readability */
+.instruction-list li {
+    padding: 0.25rem 0;
+    line-height: 1.6;
+}
+
+
+/* ── 7. PAGES: Dashboard specific ── */
+
+/* Table styling for inventory items */
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+/* Mobile inventory card hover state */
+.inventory-mobile-card {
+    transition: box-shadow 0.15s ease;
+}
+
+.inventory-mobile-card:hover {
+    box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.06);
+}
+
+/* Edit modal: rounded to match card style */
+.modal-content.rounded-4 {
+    border-radius: 1rem !important;
+}
+
+
+/* ── 8. RESPONSIVE: Mobile-specific adjustments ── */
+
+@media (max-width: 991.98px) {
+    /* Stack navbar items vertically on mobile */
+    .nav-logout-btn {
+        padding-left: 0;
+    }
+
+    /* Reduce hero padding on small screens */
+    .hero-card {
+        padding: 1.5rem;
+    }
+
+    /* Smaller recipe detail thumb on mobile */
+    .recipe-detail-thumb {
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    /* Tighten card padding on very small screens */
+    .card {
+        border-radius: 0.75rem;
+    }
+
+    .recipe-thumb {
+        min-height: 200px;
+    }
 }

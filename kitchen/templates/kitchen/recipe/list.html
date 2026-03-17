@@ -16,112 +16,111 @@
         <div class="row g-3 align-items-end">
             <div class="col-12 col-lg-6">
                 <label for="recipe-search" class="form-label fw-semibold">Search recipes</label>
-                <input type="text" id="recipe-search" class="form-control" placeholder="Search pasta, soup, rice...">
+                <input type="text" id="recipe-search" class="form-control"
+                       placeholder="Search pasta, soup, rice..."
+                       aria-label="Search recipes by name">
             </div>
-
             <div class="col-6 col-md-3 col-lg-2">
-                <label for="cook-time" class="form-label fw-semibold">Time</label>
-                <select id="cook-time" class="form-select">
-                    <option selected>Any</option>
-                    <option>Under 15 mins</option>
-                    <option>Under 30 mins</option>
-                    <option>30+ mins</option>
+                <label for="filter-cook-time" class="form-label fw-semibold">Time</label>
+                <select id="filter-cook-time" class="form-select" aria-label="Filter by cooking time">
+                    <option value="any" selected>Any</option>
+                    <option value="15">Under 15 mins</option>
+                    <option value="30">Under 30 mins</option>
+                    <option value="31">30+ mins</option>
                 </select>
             </div>
-
             <div class="col-6 col-md-3 col-lg-2">
-                <label for="difficulty" class="form-label fw-semibold">Difficulty</label>
-                <select id="difficulty" class="form-select">
-                    <option selected>Any</option>
-                    <option>Easy</option>
-                    <option>Medium</option>
-                    <option>Hard</option>
+                <label for="filter-difficulty" class="form-label fw-semibold">Difficulty</label>
+                <select id="filter-difficulty" class="form-select" aria-label="Filter by difficulty">
+                    <option value="any" selected>Any</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
                 </select>
             </div>
-
             <div class="col-6 col-md-3 col-lg-2">
-                <label for="dietary" class="form-label fw-semibold">Diet</label>
-                <select id="dietary" class="form-select">
-                    <option selected>Any</option>
-                    <option>Vegetarian</option>
-                    <option>Vegan</option>
-                    <option>High Protein</option>
+                <label for="filter-dietary" class="form-label fw-semibold">Diet</label>
+                <select id="filter-dietary" class="form-select" aria-label="Filter by dietary need">
+                    <option value="any" selected>Any</option>
+                    <option value="Vegetarian">Vegetarian</option>
+                    <option value="Vegan">Vegan</option>
+                    <option value="High Protein">High Protein</option>
                 </select>
             </div>
         </div>
 
         <div class="d-flex flex-wrap gap-2 mt-3">
-            <span class="recipe-chip">Quick dinners</span>
-            <span class="recipe-chip">Vegetarian</span>
-            <span class="recipe-chip">Use expiring items</span>
-            <span class="recipe-chip">High protein</span>
-            <span class="recipe-chip">Pantry friendly</span>
+            <button type="button" class="recipe-chip" data-filter-tag="quick">Quick dinners</button>
+            <button type="button" class="recipe-chip" data-filter-tag="vegetarian">Vegetarian</button>
+            <button type="button" class="recipe-chip" data-filter-tag="expiring">Use expiring items</button>
+            <button type="button" class="recipe-chip" data-filter-tag="protein">High protein</button>
+            <button type="button" class="recipe-chip" data-filter-tag="pantry">Pantry friendly</button>
         </div>
     </div>
 </div>
 
-<div class="card featured-recipe-card p-4 p-lg-5 mb-5">
-    {% if recipe_data_list %}
-    {% with best_match=recipe_data_list.0 %}
-    <div class="card featured-recipe-card p-4 p-lg-5 mb-5 border-0 shadow-sm" style="background-color: #fff; border-radius: 16px;">
-        <div class="row g-4 align-items-center">
-            
-            <div class="col-12 col-lg-6">
-                {% if best_match.recipe.image_url %}
-                    <div style="border-radius: 12px; height: 300px; background-image: url('{{ best_match.recipe.image_url }}'); background-size: cover; background-position: center;"></div>
-                {% else %}
-                    <div class="bg-dark text-white d-flex align-items-center justify-content-center" style="border-radius: 12px; height: 300px;">
-                        <h3 class="fw-bold">{{ best_match.recipe.name }}</h3>
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="col-12 col-lg-6">
-                <div class="featured-recipe-copy">
-                    <div class="small text-uppercase text-success fw-bold mb-2">Best Match Today</div>
-                    <h2 class="display-6 fw-bold mb-3">{{ best_match.recipe.name }}</h2>
-                    <p class="recipe-meta mb-3 text-muted">
-                        {{ best_match.recipe.prep_time }} mins · <span class="text-success fw-bold">{{ best_match.match_percentage }}% match</span>
-                    </p>
-                    <p class="mb-4" style="line-height: 1.6;">
-                        A perfect choice for today! You currently have <strong>{{ best_match.have_count }}</strong> out of <strong>{{ best_match.total_required }}</strong> ingredients needed to cook this right now.
-                    </p>
-                    
-                    <a href="{% url 'recipe_detail' best_match.recipe.id %}" class="btn btn-success px-4 py-2 fw-semibold">View Recipe</a>
+{% if featured_recipe %}
+<div class="card featured-recipe-card p-4 p-lg-5 mb-5 border-0 shadow-sm" style="background-color: #fff; border-radius: 16px;">
+    <div class="row g-4 align-items-center">
+        <div class="col-12 col-lg-6">
+            {% if featured_recipe.recipe.image_url %}
+                <div style="border-radius: 12px; height: 300px; background-image: url('{{ featured_recipe.recipe.image_url }}'); background-size: cover; background-position: center;"></div>
+            {% else %}
+                <div class="bg-dark text-white d-flex align-items-center justify-content-center" style="border-radius: 12px; height: 300px;">
+                    <h3 class="fw-bold">{{ featured_recipe.recipe.name }}</h3>
                 </div>
+            {% endif %}
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="featured-recipe-copy">
+                <div class="small text-uppercase text-success fw-bold mb-2">Best Match Today</div>
+                <h2 class="display-6 fw-bold mb-3">{{ featured_recipe.recipe.name }}</h2>
+                <p class="recipe-meta mb-3 text-muted">
+                    {{ featured_recipe.recipe.cook_time }} mins · <span class="text-success fw-bold">{{ featured_recipe.match_percentage }}% match</span>
+                </p>
+                <p class="mb-4" style="line-height: 1.6;">
+                    A perfect choice for today! You currently have <strong>{{ featured_recipe.have_count }}</strong> out of <strong>{{ featured_recipe.total_required }}</strong> ingredients needed to cook this right now.
+                </p>
+
+                <a href="{% url 'recipe_detail' featured_recipe.recipe.id %}" class="btn btn-success px-4 py-2 fw-semibold">View Recipe</a>
             </div>
         </div>
     </div>
 </div>
-{% endwith %}
-    {% endif %}
-    
+{% endif %}
+
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-    <h2 class="h3 fw-bold mb-0">More recipes you can make</h2>
-    <span class="text-muted">3 results</span>
+    <h2 class="h3 fw-bold mb-0">Recipes</h2>
+    <span id="recipe-result-count" class="text-muted">{{ recipe_data_list|length }} results</span>
 </div>
 
-<div class="row g-4">  
+<div class="row g-4" id="recipe-grid">
     {% for data in recipe_data_list %}
-    
-    <div class="col-12 col-md-6 col-xl-4"> 
-        <div class="card h-100 overflow-hidden"> 
-            <div class="p-3"> 
-                <div class="recipe-thumb d-flex align-items-center justify-content-center" 
-                        style="background-image: url('{{ data.recipe.image_url }}'); background-size: cover; background-position: center; height: 200px;">
+    <div class="col-12 col-md-6 col-xl-4 recipe-card-wrapper"
+         data-name="{{ data.recipe.name|lower }}"
+         data-cook-time="{{ data.recipe.cook_time }}"
+         data-difficulty="{{ data.recipe.difficulty|default:'Easy' }}"
+         data-dietary="any"
+         data-match="{{ data.match_percentage }}"
+         data-tags="quick pantry">
+        <div class="card h-100 overflow-hidden">
+            <div class="p-3">
+                <div class="recipe-thumb d-flex align-items-center justify-content-center"
+                     style="background-image: url('{{ data.recipe.image_url }}'); background-size: cover; background-position: center; height: 200px;">
                     {% if not data.recipe.image_url %}
                         <div class="recipe-thumb-content text-center">
                             <p class="recipe-thumb-title fs-4 fw-bold mb-0 text-white">{{ data.recipe.name }}</p>
                         </div>
-    {% endif %}
-</div> 
+                    {% endif %}
+                </div>
             </div>
-            
+
             <div class="card-body pt-0">
                 <h3 class="h4 fw-bold">{{ data.recipe.name }}</h3>
-                
+
                 <p class="recipe-meta mb-2">
-                    Ingredients: {{ data.have_count }} / {{ data.total_required }}
+                    {{ data.recipe.cook_time }} mins · Ingredients: {{ data.have_count }} / {{ data.total_required }}
                 </p>
                 <p class="mb-3 small">
                     {% if data.missing_count > 0 %}
@@ -130,23 +129,25 @@
                         <span class="text-success fw-semibold">Ready to cook!</span>
                     {% endif %}
                 </p>
-                
+
                 <div class="d-flex flex-wrap gap-2 mb-3">
                     <span class="badge {% if data.match_percentage == 100 %}badge-soft-success{% elif data.match_percentage >= 50 %}badge-soft-warning{% else %}badge-soft-danger{% endif %}">
                         {{ data.match_percentage }}% Match
                     </span>
                 </div>
-                
+
                 <a href="{% url 'recipe_detail' data.recipe.id %}" class="btn btn-success w-100 mt-auto">View Details</a>
             </div>
         </div>
     </div>
-
     {% empty %}
-            <div class="col-12 text-center py-5">
-                <p class="text-muted">No recipes found. Please add some to the database.</p>
-            </div>
-    
-        {% endfor %}
-        </div>
+    <div class="col-12 text-center py-5">
+        <p class="text-muted">No recipes found. Please add some to the database.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<div id="no-filter-results" class="text-center text-muted py-5 d-none">
+    <p class="fs-5">No recipes match your current filters. Try broadening your search.</p>
+</div>
 {% endblock %}
