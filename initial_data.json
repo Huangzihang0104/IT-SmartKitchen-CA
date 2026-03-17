@@ -1,0 +1,914 @@
+[
+{
+    "model": "kitchen.ingredient",
+    "pk": 1,
+    "fields": {
+        "name": "Potato",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 2,
+    "fields": {
+        "name": "Tomato",
+        "shelf_life": 4,
+        "category": "vegetables",
+        "unit": "pcs",
+        "base_unit_qty": 5.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 3,
+    "fields": {
+        "name": "egg",
+        "shelf_life": 8,
+        "category": null,
+        "unit": "pcs",
+        "base_unit_qty": 6.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 4,
+    "fields": {
+        "name": "beef",
+        "shelf_life": 3,
+        "category": "meat",
+        "unit": "g",
+        "base_unit_qty": 500.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 5,
+    "fields": {
+        "name": "ginger",
+        "shelf_life": 4,
+        "category": "vegetables",
+        "unit": "slice",
+        "base_unit_qty": 6.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 6,
+    "fields": {
+        "name": "Milk",
+        "shelf_life": 3,
+        "category": null,
+        "unit": "ml",
+        "base_unit_qty": 500.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 7,
+    "fields": {
+        "name": "oat",
+        "shelf_life": 20,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 250.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 8,
+    "fields": {
+        "name": "Chicken Breast",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 9,
+    "fields": {
+        "name": "Peanuts",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 10,
+    "fields": {
+        "name": "Dried Chili",
+        "shelf_life": null,
+        "category": null,
+        "unit": "pcs",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 11,
+    "fields": {
+        "name": "Soy Sauce",
+        "shelf_life": null,
+        "category": null,
+        "unit": "ml",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 12,
+    "fields": {
+        "name": "Soft Tofu",
+        "shelf_life": null,
+        "category": null,
+        "unit": "block",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 13,
+    "fields": {
+        "name": "Minced Beef",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 14,
+    "fields": {
+        "name": "Doubanjiang",
+        "shelf_life": null,
+        "category": null,
+        "unit": "spoons",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 15,
+    "fields": {
+        "name": "Spring Onion",
+        "shelf_life": null,
+        "category": null,
+        "unit": "stalk",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 16,
+    "fields": {
+        "name": "Egg",
+        "shelf_life": null,
+        "category": null,
+        "unit": "pcs",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 17,
+    "fields": {
+        "name": "Sugar",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 18,
+    "fields": {
+        "name": "Beef Flank",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 19,
+    "fields": {
+        "name": "Broccoli",
+        "shelf_life": null,
+        "category": null,
+        "unit": "head",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 20,
+    "fields": {
+        "name": "Garlic",
+        "shelf_life": null,
+        "category": null,
+        "unit": "cloves",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 21,
+    "fields": {
+        "name": "Oyster Sauce",
+        "shelf_life": null,
+        "category": null,
+        "unit": "ml",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 22,
+    "fields": {
+        "name": "Cooked Rice",
+        "shelf_life": null,
+        "category": null,
+        "unit": "bowls",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 23,
+    "fields": {
+        "name": "Carrot",
+        "shelf_life": null,
+        "category": null,
+        "unit": "pc",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 24,
+    "fields": {
+        "name": "Onion",
+        "shelf_life": null,
+        "category": null,
+        "unit": "pc",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 25,
+    "fields": {
+        "name": "Salmon Fillet",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 26,
+    "fields": {
+        "name": "Honey",
+        "shelf_life": null,
+        "category": null,
+        "unit": "spoon",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 27,
+    "fields": {
+        "name": "Bread",
+        "shelf_life": null,
+        "category": null,
+        "unit": "slice",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 28,
+    "fields": {
+        "name": "Avocado",
+        "shelf_life": null,
+        "category": null,
+        "unit": "pc",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 29,
+    "fields": {
+        "name": "Arborio Rice",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 30,
+    "fields": {
+        "name": "Mushroom",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 31,
+    "fields": {
+        "name": "Vegetable Stock",
+        "shelf_life": null,
+        "category": null,
+        "unit": "ml",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 32,
+    "fields": {
+        "name": "Flour",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.ingredient",
+    "pk": 33,
+    "fields": {
+        "name": "Blueberries",
+        "shelf_life": null,
+        "category": null,
+        "unit": "g",
+        "base_unit_qty": 1.0,
+        "image_url": null
+    }
+},
+{
+    "model": "kitchen.inventory",
+    "pk": 2,
+    "fields": {
+        "user": 2,
+        "ingredient": 2,
+        "purchase_date": "2026-03-17",
+        "expiry_date": "2026-03-20",
+        "quantity": 5.0,
+        "is_notified": false
+    }
+},
+{
+    "model": "kitchen.inventory",
+    "pk": 3,
+    "fields": {
+        "user": 2,
+        "ingredient": 16,
+        "purchase_date": "2026-03-17",
+        "expiry_date": "2026-03-22",
+        "quantity": 10.0,
+        "is_notified": false
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 2,
+    "fields": {
+        "name": "Beef Stew with Tomatoes",
+        "instructions": "1. Prepare the beef\r\nCut the beef into chunks.\r\nPut it into cold water, bring to a boil, and remove the foam.\r\nTake the beef out and rinse it clean.\r\n\r\n2. Prepare the tomatoes\r\nCut the tomatoes into wedges.\r\n(You can peel them if you want a smoother texture.)\r\n\r\n3. Heat oil in a pot.\r\nAdd ginger and garlic, stir-fry until fragrant.\r\n\r\n4. Cook the beef\r\nAdd the beef and stir-fry for a few minutes.\r\nAdd soy sauce and dark soy sauce, mix well.\r\n\r\n5. Add tomatoes and simmer\r\nAdd the tomatoes and stir briefly.\r\nPour in water until the beef is covered.\r\nAdd sugar and optional spices (star anise, bay leaves).\r\n\r\n6. Slow cook\r\nBring to a boil, then reduce heat and simmer for 60–90 minutes\r\nuntil the beef becomes tender.\r\n\r\n7. Season and serve\r\nAdd salt to taste.\r\nSprinkle spring onions on top if you like.\r\nServe hot.",
+        "difficulty": "medium",
+        "cook_time": 100,
+        "image_url": "https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480/img/recipe/ras/Assets/93e13752-2074-4a51-9531-ccef35ff864c/Derivates/b5f11b67-e098-4983-9830-a5da45379bfc.jpg"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 3,
+    "fields": {
+        "name": "Oatmeal with Milk",
+        "instructions": "1. Heat the milk\r\nPour the milk into a small pot and heat it over medium-low heat.\r\nDo not let it boil too hard.\r\n\r\n2. Add oats\r\nAdd the oats into the warm milk.\r\nStir gently to prevent sticking.\r\n\r\n3. Cook\r\nCook for about 3–5 minutes, stirring occasionally,\r\nuntil the oats become soft and creamy.\r\n\r\n4. Sweeten\r\nAdd sugar or honey if you like a sweeter taste.\r\n\r\n5. Add toppings\r\nTurn off the heat.\r\nAdd sliced fruits and nuts on top.\r\n\r\n6. Serve\r\nLet it cool slightly, then enjoy.",
+        "difficulty": "easy",
+        "cook_time": 10,
+        "image_url": "https://images.openai.com/static-rsc-3/mtMqtTr_34RGgMARwCOaHbI6f73xAh7R6fgdeMsDka79nvH3bwOTrCDaXMV4VdHM5_eboabbzJQrUofhcOJ2NNJV7Yr9pvYqqFjBjWAy_cE?purpose=fullsize&v=1"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 4,
+    "fields": {
+        "name": "Classic Beef Stew",
+        "instructions": "1. Brown beef. 2. Sauté veggies. 3. Simmer for 90 mins.",
+        "difficulty": "medium",
+        "cook_time": 90,
+        "image_url": "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 5,
+    "fields": {
+        "name": "Honey Garlic Salmon",
+        "instructions": "1. Season salmon. \r\n2. Pan-fry. \r\n3. Glaze with honey and garlic.",
+        "difficulty": "easy",
+        "cook_time": 20,
+        "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 6,
+    "fields": {
+        "name": "Avocado Toast",
+        "instructions": "1. Toast bread. \r\n2. Mash avocado. \r\n3. Season.",
+        "difficulty": "easy",
+        "cook_time": 10,
+        "image_url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 7,
+    "fields": {
+        "name": "Mushroom Risotto",
+        "instructions": "1. Sauté mushrooms. \r\n2. Gradually add broth to rice. \r\n3. Stir until creamy.",
+        "difficulty": "medium",
+        "cook_time": 40,
+        "image_url": "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=800"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 9,
+    "fields": {
+        "name": "Berry Pancake",
+        "instructions": "1. Mix batter. \r\n2. Pour onto griddle. \r\n3. Top with fresh berries and syrup.",
+        "difficulty": "easy",
+        "cook_time": 15,
+        "image_url": "https://www.allrecipes.com/thmb/ecb0XKvcrE7OyxBLX3OVEd30TbE%3D/1500x0/filters%3Ano_upscale%28%29%3Amax_bytes%28150000%29%3Astrip_icc%28%29/686460-todds-famous-blueberry-pancakes-Dianne-1x1-1-9bd040b975634bce884847ce2090de16.jpg"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 10,
+    "fields": {
+        "name": "Kung Pao Chicken (宫保鸡丁)",
+        "instructions": "1. Dice chicken and marinate with soy sauce.\r\n2. Fry peanuts until crunchy.\r\n3. Stir-fry chicken with dried chili and sichuan pepper.\r\n4. Add sauce and peanuts, toss together.",
+        "difficulty": "medium",
+        "cook_time": 25,
+        "image_url": "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=800"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 11,
+    "fields": {
+        "name": "Mapo Tofu (麻婆豆腐)",
+        "instructions": "1. Cut tofu into cubes and blanch in salty water.\r\n2. Fry minced beef until brown.\r\n3. Add Doubanjiang (chili bean paste) and stir until red oil appears.\r\n4. Add tofu and simmer for 5 mins.\r\n5. Thicken with starch and sprinkle Sichuan pepper powder.",
+        "difficulty": "medium",
+        "cook_time": 20,
+        "image_url": "https://images.openai.com/static-rsc-3/-SFgY-Dra0gCT6rFYS2KL2UefCPHqjJ0FJd9ogW8pwIfV3vsk06kV5pnerb4KSCa7hCxT2a7ILEGpki5VrIrXPpVunnstQhpIRo91UAYtLQ?purpose=fullsize&v=1"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 12,
+    "fields": {
+        "name": "Tomato Scrambled Eggs (番茄炒蛋)",
+        "instructions": "1. Beat eggs and fry until just set, then remove.\r\n2. Stir-fry tomato wedges until soft and juicy.\r\n3. Put eggs back, add salt and a pinch of sugar.\r\n4. Mix well and serve.",
+        "difficulty": "easy",
+        "cook_time": 10,
+        "image_url": "https://images.openai.com/static-rsc-3/KJdWMtBtcbwpWPvQKvG7BBs0YT9s1AgNmeAJ9Lrvz4bB-t0GMyPlzrHfNeC_ZvN5UvVsLtPETn3NF29nvQSjA2gjwB-yFUU_zVIazXKq9RQ?purpose=fullsize&v=1"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 13,
+    "fields": {
+        "name": "Stir-fried Broccoli with Beef (西兰花炒牛肉)",
+        "instructions": "1. Thinly slice beef and marinate with cornstarch.\r\n2. Blanch broccoli for 2 mins.\r\n3. Stir-fry beef until no longer pink.\r\n4. Add broccoli and garlic, season with oyster sauce.",
+        "difficulty": "medium",
+        "cook_time": 20,
+        "image_url": "https://images.openai.com/static-rsc-3/YrWitKXrSKuViF_4QSZJ-HfV8k0bjlzxoSS6k8WyDYYLZfQy2qlK4dmvTNbVG9LfUU7w5K1M3xiCoozh7v9gtJzsZ9GPuzTce0OnOReduWA?purpose=fullsize&v=1"
+    }
+},
+{
+    "model": "kitchen.recipe",
+    "pk": 14,
+    "fields": {
+        "name": "Egg Fried Rice (蛋炒饭)",
+        "instructions": "1. Use leftover cold rice.\r\n2. Fry eggs and break into small pieces.\r\n3. Add rice and toss on high heat.\r\n4. Add soy sauce, salt, and lots of chopped spring onions.",
+        "difficulty": "easy",
+        "cook_time": 15,
+        "image_url": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=800"
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 3,
+    "fields": {
+        "recipe": 2,
+        "ingredient": 2,
+        "quantity_required": 3.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 4,
+    "fields": {
+        "recipe": 2,
+        "ingredient": 4,
+        "quantity_required": 500.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 5,
+    "fields": {
+        "recipe": 2,
+        "ingredient": 5,
+        "quantity_required": 2.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 6,
+    "fields": {
+        "recipe": 3,
+        "ingredient": 6,
+        "quantity_required": 250.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 7,
+    "fields": {
+        "recipe": 3,
+        "ingredient": 7,
+        "quantity_required": 40.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 8,
+    "fields": {
+        "recipe": 10,
+        "ingredient": 8,
+        "quantity_required": 300.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 9,
+    "fields": {
+        "recipe": 10,
+        "ingredient": 9,
+        "quantity_required": 50.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 10,
+    "fields": {
+        "recipe": 10,
+        "ingredient": 10,
+        "quantity_required": 10.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 11,
+    "fields": {
+        "recipe": 10,
+        "ingredient": 11,
+        "quantity_required": 20.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 12,
+    "fields": {
+        "recipe": 11,
+        "ingredient": 12,
+        "quantity_required": 1.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 13,
+    "fields": {
+        "recipe": 11,
+        "ingredient": 13,
+        "quantity_required": 100.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 14,
+    "fields": {
+        "recipe": 11,
+        "ingredient": 14,
+        "quantity_required": 2.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 15,
+    "fields": {
+        "recipe": 11,
+        "ingredient": 15,
+        "quantity_required": 1.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 16,
+    "fields": {
+        "recipe": 12,
+        "ingredient": 16,
+        "quantity_required": 3.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 17,
+    "fields": {
+        "recipe": 12,
+        "ingredient": 2,
+        "quantity_required": 2.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 18,
+    "fields": {
+        "recipe": 12,
+        "ingredient": 17,
+        "quantity_required": 5.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 19,
+    "fields": {
+        "recipe": 13,
+        "ingredient": 18,
+        "quantity_required": 200.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 20,
+    "fields": {
+        "recipe": 13,
+        "ingredient": 19,
+        "quantity_required": 1.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 21,
+    "fields": {
+        "recipe": 13,
+        "ingredient": 20,
+        "quantity_required": 3.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 22,
+    "fields": {
+        "recipe": 13,
+        "ingredient": 21,
+        "quantity_required": 15.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 23,
+    "fields": {
+        "recipe": 14,
+        "ingredient": 22,
+        "quantity_required": 2.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 24,
+    "fields": {
+        "recipe": 14,
+        "ingredient": 16,
+        "quantity_required": 2.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 25,
+    "fields": {
+        "recipe": 14,
+        "ingredient": 15,
+        "quantity_required": 2.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 26,
+    "fields": {
+        "recipe": 4,
+        "ingredient": 18,
+        "quantity_required": 500.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 27,
+    "fields": {
+        "recipe": 4,
+        "ingredient": 1,
+        "quantity_required": 2.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 28,
+    "fields": {
+        "recipe": 4,
+        "ingredient": 23,
+        "quantity_required": 1.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 29,
+    "fields": {
+        "recipe": 4,
+        "ingredient": 24,
+        "quantity_required": 1.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 30,
+    "fields": {
+        "recipe": 5,
+        "ingredient": 25,
+        "quantity_required": 200.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 31,
+    "fields": {
+        "recipe": 5,
+        "ingredient": 26,
+        "quantity_required": 1.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 32,
+    "fields": {
+        "recipe": 5,
+        "ingredient": 20,
+        "quantity_required": 2.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 33,
+    "fields": {
+        "recipe": 6,
+        "ingredient": 27,
+        "quantity_required": 1.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 34,
+    "fields": {
+        "recipe": 6,
+        "ingredient": 28,
+        "quantity_required": 0.5
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 35,
+    "fields": {
+        "recipe": 6,
+        "ingredient": 16,
+        "quantity_required": 1.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 36,
+    "fields": {
+        "recipe": 7,
+        "ingredient": 29,
+        "quantity_required": 100.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 37,
+    "fields": {
+        "recipe": 7,
+        "ingredient": 30,
+        "quantity_required": 150.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 38,
+    "fields": {
+        "recipe": 7,
+        "ingredient": 31,
+        "quantity_required": 300.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 39,
+    "fields": {
+        "recipe": 9,
+        "ingredient": 32,
+        "quantity_required": 100.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 40,
+    "fields": {
+        "recipe": 9,
+        "ingredient": 6,
+        "quantity_required": 150.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 41,
+    "fields": {
+        "recipe": 9,
+        "ingredient": 33,
+        "quantity_required": 30.0
+    }
+},
+{
+    "model": "kitchen.recipeingredient",
+    "pk": 42,
+    "fields": {
+        "recipe": 9,
+        "ingredient": 16,
+        "quantity_required": 1.0
+    }
+}
+]
