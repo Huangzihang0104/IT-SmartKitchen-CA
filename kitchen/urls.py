@@ -20,10 +20,12 @@ urlpatterns = [
 
     # Inventory dashboard
     path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('inventory/add/', views.add_inventory_view, name='add_inventory'),
+    path('inventory/edit/<int:item_id>/', views.edit_inventory_view, name='edit_inventory'),
 
     # Recipes
     path('recipes/', views.recipe_list_view, name='recipe_list'),
-    path('recipes/detail/', views.recipe_detail_view, name='recipe_detail'),
+    path('recipes/<int:recipe_id>/', views.recipe_detail_view, name='recipe_detail'),
 
     # AJAX endpoints for inventory CRUD
     path('ingredients/add/', views.add_ingredient, name='add_ingredient'),

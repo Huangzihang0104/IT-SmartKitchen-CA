@@ -3,7 +3,6 @@
 {% block title %}Recipe Recommendations | SmartKitchen{% endblock %}
 
 {% block content %}
-<!-- Page header -->
 <div class="mb-4">
     <div class="mb-3">
         <div class="small text-uppercase text-muted fw-semibold mb-2">Discover recipes</div>
@@ -13,7 +12,6 @@
         </p>
     </div>
 
-    <!-- ── Filter bar: client-side filtering powered by JavaScript ── -->
     <div class="card p-3 p-md-4 mb-3">
         <div class="row g-3 align-items-end">
             <div class="col-12 col-lg-6">
@@ -51,7 +49,6 @@
             </div>
         </div>
 
-        <!-- Quick-filter chips: clickable JS-driven shortcuts -->
         <div class="d-flex flex-wrap gap-2 mt-3">
             <button type="button" class="recipe-chip" data-filter-tag="quick">Quick dinners</button>
             <button type="button" class="recipe-chip" data-filter-tag="vegetarian">Vegetarian</button>
@@ -62,90 +59,94 @@
     </div>
 </div>
 
-<!-- ── Featured recipe highlight ── -->
 {% if featured_recipe %}
-<div class="card featured-recipe-card p-4 p-lg-5 mb-5">
+<div class="card featured-recipe-card p-4 p-lg-5 mb-5 border-0 shadow-sm" style="background-color: #fff; border-radius: 16px;">
     <div class="row g-4 align-items-center">
         <div class="col-12 col-lg-6">
-            <div class="recipe-thumb recipe-thumb-{{ featured_recipe.thumb }}">
-                <div class="recipe-thumb-content">
-                    <span class="recipe-thumb-label">Featured recommendation</span>
-                    <p class="recipe-thumb-title">{{ featured_recipe.name }}</p>
+            {% if featured_recipe.recipe.image_url %}
+                <div style="border-radius: 12px; height: 300px; background-image: url('{{ featured_recipe.recipe.image_url }}'); background-size: cover; background-position: center;"></div>
+            {% else %}
+                <div class="bg-dark text-white d-flex align-items-center justify-content-center" style="border-radius: 12px; height: 300px;">
+                    <h3 class="fw-bold">{{ featured_recipe.recipe.name }}</h3>
                 </div>
-            </div>
+            {% endif %}
         </div>
+
         <div class="col-12 col-lg-6">
             <div class="featured-recipe-copy">
-                <div class="small text-uppercase text-success fw-semibold mb-2">Best match today</div>
-                <h2 class="display-6 fw-bold mb-3">{{ featured_recipe.name }}</h2>
-                <p class="recipe-meta mb-3">
-                    {{ featured_recipe.cook_time }} mins &middot;
-                    {{ featured_recipe.difficulty }} &middot;
-                    {{ featured_recipe.dietary }} &middot;
-                    {{ featured_recipe.match }}% match
+                <div class="small text-uppercase text-success fw-bold mb-2">Best Match Today</div>
+                <h2 class="display-6 fw-bold mb-3">{{ featured_recipe.recipe.name }}</h2>
+                <p class="recipe-meta mb-3 text-muted">
+                    {{ featured_recipe.recipe.cook_time }} mins · <span class="text-success fw-bold">{{ featured_recipe.match_percentage }}% match</span>
                 </p>
-                <p class="mb-4">{{ featured_recipe.description }}</p>
-                <a href="{% url 'recipe_detail' %}" class="btn btn-success px-4">View Recipe</a>
+                <p class="mb-4" style="line-height: 1.6;">
+                    A perfect choice for today! You currently have <strong>{{ featured_recipe.have_count }}</strong> out of <strong>{{ featured_recipe.total_required }}</strong> ingredients needed to cook this right now.
+                </p>
+
+                <a href="{% url 'recipe_detail' featured_recipe.recipe.id %}" class="btn btn-success px-4 py-2 fw-semibold">View Recipe</a>
             </div>
         </div>
     </div>
 </div>
 {% endif %}
 
-<!-- ── Recipe results grid ── -->
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-    <h2 class="h3 fw-bold mb-0">
-        {% if featured_recipe %}More recipes you can make{% else %}Recipes{% endif %}
-    </h2>
-    <span id="recipe-result-count" class="text-muted">{{ recipes|length }} results</span>
+    <h2 class="h3 fw-bold mb-0">Recipes</h2>
+    <span id="recipe-result-count" class="text-muted">{{ recipe_data_list|length }} results</span>
 </div>
 
 <div class="row g-4" id="recipe-grid">
-    {% for recipe in recipes %}
+    {% for data in recipe_data_list %}
     <div class="col-12 col-md-6 col-xl-4 recipe-card-wrapper"
-         data-name="{{ recipe.name|lower }}"
-         data-cook-time="{{ recipe.cook_time }}"
-         data-difficulty="{{ recipe.difficulty }}"
-         data-dietary="{{ recipe.dietary|lower }}"
-         data-match="{{ recipe.match }}"
-         data-tags="{{ recipe.tags|lower }}">
+         data-name="{{ data.recipe.name|lower }}"
+         data-cook-time="{{ data.recipe.cook_time }}"
+         data-difficulty="{{ data.recipe.difficulty|default:'Easy' }}"
+         data-dietary="any"
+         data-match="{{ data.match_percentage }}"
+         data-tags="quick pantry">
         <div class="card h-100 overflow-hidden">
             <div class="p-3">
-                <div class="recipe-thumb recipe-thumb-{{ recipe.thumb }}">
-                    <div class="recipe-thumb-content">
-                        <span class="recipe-thumb-label">{{ recipe.label }}</span>
-                        <p class="recipe-thumb-title">{{ recipe.name }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body pt-0">
-                <h3 class="h4 fw-bold">{{ recipe.name }}</h3>
-                <p class="recipe-meta mb-2">
-                    {{ recipe.cook_time }} mins &middot;
-                    {{ recipe.difficulty }} &middot;
-                    {{ recipe.dietary }}
-                </p>
-                <p class="mb-3">{{ recipe.description }}</p>
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge badge-soft-success">{{ recipe.match }}% Match</span>
-                    {% if recipe.badge %}
-                        <span class="badge badge-soft-{{ recipe.badge_class }}">{{ recipe.badge }}</span>
+                <div class="recipe-thumb d-flex align-items-center justify-content-center"
+                     style="background-image: url('{{ data.recipe.image_url }}'); background-size: cover; background-position: center; height: 200px;">
+                    {% if not data.recipe.image_url %}
+                        <div class="recipe-thumb-content text-center">
+                            <p class="recipe-thumb-title fs-4 fw-bold mb-0 text-white">{{ data.recipe.name }}</p>
+                        </div>
                     {% endif %}
                 </div>
-                <a href="{% url 'recipe_detail' %}" class="btn btn-success w-100">View Details</a>
+            </div>
+
+            <div class="card-body pt-0">
+                <h3 class="h4 fw-bold">{{ data.recipe.name }}</h3>
+
+                <p class="recipe-meta mb-2">
+                    {{ data.recipe.cook_time }} mins · Ingredients: {{ data.have_count }} / {{ data.total_required }}
+                </p>
+                <p class="mb-3 small">
+                    {% if data.missing_count > 0 %}
+                        <span class="text-danger fw-semibold">Missing {{ data.missing_count }} item(s)</span>
+                    {% else %}
+                        <span class="text-success fw-semibold">Ready to cook!</span>
+                    {% endif %}
+                </p>
+
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="badge {% if data.match_percentage == 100 %}badge-soft-success{% elif data.match_percentage >= 50 %}badge-soft-warning{% else %}badge-soft-danger{% endif %}">
+                        {{ data.match_percentage }}% Match
+                    </span>
+                </div>
+
+                <a href="{% url 'recipe_detail' data.recipe.id %}" class="btn btn-success w-100 mt-auto">View Details</a>
             </div>
         </div>
     </div>
     {% empty %}
-    <div class="col-12">
-        <div class="text-center text-muted py-5">
-            <p class="fs-5">No recipes found. Try adjusting your filters.</p>
-        </div>
+    <div class="col-12 text-center py-5">
+        <p class="text-muted">No recipes found. Please add some to the database.</p>
     </div>
     {% endfor %}
 </div>
 
-<!-- Hidden message for when JS filtering produces no results -->
 <div id="no-filter-results" class="text-center text-muted py-5 d-none">
     <p class="fs-5">No recipes match your current filters. Try broadening your search.</p>
 </div>

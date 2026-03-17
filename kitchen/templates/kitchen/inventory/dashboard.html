@@ -3,7 +3,6 @@
 {% block title %}Inventory Dashboard | SmartKitchen{% endblock %}
 
 {% block content %}
-<!-- Dashboard header with dynamic item count -->
 <div class="hero-card mb-4">
     <div class="row align-items-center">
         <div class="col-md-8">
@@ -19,12 +18,10 @@
 </div>
 
 <div class="row g-4">
-    <!-- ── Left column: Add Ingredient form ── -->
     <div class="col-12 col-lg-4">
         <div class="card p-4">
             <h2 class="section-title h4">Add Ingredient</h2>
 
-            <!-- Add-ingredient form: submitted via AJAX (no full page reload) -->
             <form id="add-ingredient-form" novalidate>
                 {% csrf_token %}
 
@@ -56,7 +53,6 @@
 
                 <div class="mb-3">
                     <label for="ingredient-expiry" class="form-label">Expiry Date</label>
-                    <!-- type="date" provides native date picker (better UX + accessibility) -->
                     <input type="date" id="ingredient-expiry" class="form-control"
                            required aria-required="true">
                     <div class="invalid-feedback">Please select an expiry date.</div>
@@ -69,12 +65,10 @@
         </div>
     </div>
 
-    <!-- ── Right column: Inventory table ── -->
     <div class="col-12 col-lg-8">
         <div class="card p-4">
             <h2 class="section-title h4">My Inventory</h2>
 
-            <!-- Desktop table view (hidden on small screens) -->
             <div class="table-responsive d-none d-md-block">
                 <table class="table align-middle" aria-label="Inventory items">
                     <thead>
@@ -128,7 +122,6 @@
                 </table>
             </div>
 
-            <!-- Mobile card view (shown only on small screens) -->
             <div id="inventory-mobile-list" class="d-md-none">
                 {% for item in inventory_items %}
                 <div class="card p-3 mb-3 inventory-mobile-card" data-ingredient-id="{{ item.id }}">
@@ -172,7 +165,6 @@
     </div>
 </div>
 
-<!-- Edit modal: accessible dialog for updating ingredient details -->
 <div class="modal fade" id="editIngredientModal" tabindex="-1"
      aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

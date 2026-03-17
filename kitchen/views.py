@@ -1,316 +1,295 @@
 """
 Views for the SmartKitchen application.
-
-Handles page rendering and AJAX endpoints for:
-- User authentication (register, login, logout)
-- Inventory dashboard (list, add, edit, delete ingredients)
-- Recipe browsing (list, detail, mark-as-cooked)
-
-Design note: Views pass context dictionaries to templates so that
-templates can use {% for %} loops and {{ variable }} tags rather
-than hard-coding HTML content. This follows Django best practices
-for separation of concerns between views and templates.
 """
 
 import json
-from datetime import date, timedelta
+from datetime import date
 
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, InventoryForm
+from .models import Ingredient, Inventory, Recipe
 
 
-# ── Helper: compute expiry status from a date string ──
-
-def _expiry_status(expiry_str):
+def _expiry_status(expiry_date):
     """Return (css_class, label) based on how close the expiry date is."""
     today = date.today()
-    try:
-        expiry = date.fromisoformat(expiry_str)
-    except (ValueError, TypeError):
-        return ('secondary', 'Unknown')
-
-    diff = (expiry - today).days
+    diff = (expiry_date - today).days
     if diff < 0:
-        return ('danger', 'Expired')
-    elif diff <= 3:
-        return ('warning', 'Expiring Soon')
-    else:
-        return ('success', 'Fresh')
+        return "danger", "Expired"
+    if diff <= 3:
+        return "warning", "Expiring Soon"
+    return "success", "Fresh"
 
-
-# ── Helper: build demo inventory data ──
-# TODO: Replace with real database queries once models are populated.
-# The template structure ({% for item in inventory_items %}) will
-# work identically with either demo data or real QuerySet results.
-
-def _get_demo_inventory():
-    """Return a list of demo ingredient dicts for template rendering."""
-    today = date.today()
-    items = [
-        {
-            'id': 1,
-            'name': 'Milk',
-            'quantity': 1,
-            'unit': 'bottle',
-            'expiry_date': str(today + timedelta(days=2)),
-        },
-        {
-            'id': 2,
-            'name': 'Eggs',
-            'quantity': 6,
-            'unit': 'pcs',
-            'expiry_date': str(today + timedelta(days=7)),
-        },
-        {
-            'id': 3,
-            'name': 'Spinach',
-            'quantity': 200,
-            'unit': 'g',
-            'expiry_date': str(today - timedelta(days=1)),
-        },
-        {
-            'id': 4,
-            'name': 'Pasta',
-            'quantity': 500,
-            'unit': 'g',
-            'expiry_date': str(today + timedelta(days=60)),
-        },
-        {
-            'id': 5,
-            'name': 'Mushrooms',
-            'quantity': 150,
-            'unit': 'g',
-            'expiry_date': str(today + timedelta(days=3)),
-        },
-    ]
-    # Enrich each item with computed status fields
-    for item in items:
-        cls, label = _expiry_status(item['expiry_date'])
-        item['status_class'] = cls
-        item['status_label'] = label
-    return items
-
-
-def _get_demo_recipes():
-    """Return demo recipe data for the recipe list and detail pages."""
-    return {
-        'featured': {
-            'name': 'Creamy Mushroom Pasta',
-            'thumb': 'pasta',
-            'cook_time': 25,
-            'difficulty': 'Easy',
-            'dietary': 'Vegetarian',
-            'match': 85,
-            'description': 'A quick, creamy pasta dish that makes excellent use of mushrooms, garlic, and ingredients already in your kitchen.',
-        },
-        'recipes': [
-            {
-                'name': 'Spinach Omelette',
-                'thumb': 'omelette',
-                'cook_time': 15,
-                'difficulty': 'Easy',
-                'dietary': 'High Protein',
-                'match': 92,
-                'label': 'Quick & fresh',
-                'description': 'An efficient way to use eggs and spinach before they expire.',
-                'badge': 'Spinach expiring',
-                'badge_class': 'danger',
-                'tags': 'quick protein expiring',
-            },
-            {
-                'name': 'Garlic Fried Rice',
-                'thumb': 'rice',
-                'cook_time': 20,
-                'difficulty': 'Medium',
-                'dietary': 'Dairy Free',
-                'match': 78,
-                'label': 'Pantry friendly',
-                'description': 'A flexible recipe ideal for leftover rice and quick weeknight cooking.',
-                'badge': 'Good pantry fit',
-                'badge_class': 'success',
-                'tags': 'quick pantry',
-            },
-            {
-                'name': 'Tomato Pasta Bake',
-                'thumb': 'bake',
-                'cook_time': 30,
-                'difficulty': 'Easy',
-                'dietary': 'Vegetarian',
-                'match': 74,
-                'label': 'Comfort food',
-                'description': 'A simple baked pasta dish that works well with staple cupboard ingredients.',
-                'badge': 'Great for leftovers',
-                'badge_class': 'warning',
-                'tags': 'vegetarian pantry',
-            },
-        ],
-    }
-
-
-# ── Page views ──
 
 def home(request):
-    """Landing page — adapts hero content based on authentication state."""
-    inventory = _get_demo_inventory()
-    context = {
-        'total_ingredients': len(inventory),
-        'total_recipes': len(_get_demo_recipes()['recipes']),
-    }
-    return render(request, 'kitchen/home.html', context)
+    return render(request, "kitchen/home.html")
 
 
+# Core Authentication Logic (M1)
 def register_view(request):
-    """User registration with custom form that includes email field."""
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, 'Account created successfully.')
-            return redirect('dashboard')
+            messages.success(request, "Registration successful! Welcome to SmartKitchen!")
+            return redirect("home")
     else:
         form = CustomUserCreationForm()
-    return render(request, 'kitchen/auth/register.html', {'form': form})
+    return render(request, "kitchen/auth/register.html", {"form": form})
 
 
 def login_view(request):
-    """User login using Django's built-in AuthenticationForm."""
-    if request.method == 'POST':
+    if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            login(request, form.get_user())
-            messages.success(request, 'Logged in successfully.')
-            return redirect('dashboard')
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"Welcome, {username}!")
+                return redirect("home")
     else:
         form = AuthenticationForm()
-    return render(request, 'kitchen/auth/login.html', {'form': form})
+    return render(request, "kitchen/auth/login.html", {"form": form})
 
 
 @require_POST
 def logout_view(request):
-    """Logout: only accepts POST requests (CSRF-protected)."""
     logout(request)
-    messages.info(request, 'You have successfully logged out.')
-    return redirect('login')
+    messages.info(request, "You have successfully logged out.")
+    return redirect("login")
 
 
-@login_required
+# Inventory Management Logic (M2/M3)
+@login_required(login_url="login")
 def dashboard_view(request):
-    """Inventory dashboard — passes ingredient list to template for rendering."""
+    user_inventory = Inventory.objects.filter(user=request.user).select_related("ingredient").order_by("expiry_date")
+    inventory_items = []
+    for item in user_inventory:
+        status_class, status_label = _expiry_status(item.expiry_date)
+        inventory_items.append(
+            {
+                "id": item.id,
+                "name": item.ingredient.name,
+                "quantity": item.quantity,
+                "unit": item.ingredient.unit,
+                "expiry_date": item.expiry_date.strftime("%Y-%m-%d"),
+                "status_class": status_class,
+                "status_label": status_label,
+            }
+        )
+
     context = {
-        'inventory_items': _get_demo_inventory(),
+        "inventory_items": inventory_items,
+        "form": InventoryForm(),
     }
-    return render(request, 'kitchen/inventory/dashboard.html', context)
+    return render(request, "kitchen/inventory/dashboard.html", context)
 
 
-def recipe_list_view(request):
-    """Recipe recommendations — passes recipe list and featured recipe to template."""
-    data = _get_demo_recipes()
-    context = {
-        'featured_recipe': data['featured'],
-        'recipes': data['recipes'],
-    }
-    return render(request, 'kitchen/recipe/list.html', context)
+@login_required(login_url="login")
+def add_inventory_view(request):
+    if request.method == "POST":
+        form = InventoryForm(request.POST)
+        if form.is_valid():
+            raw_name = form.cleaned_data.get("ingredient_name", "").strip()
+            formatted_name = raw_name.capitalize()
+            unit = (form.cleaned_data.get("unit") or "pcs").strip() or "pcs"
+
+            ingredient_obj, _ = Ingredient.objects.get_or_create(
+                name=formatted_name,
+                defaults={"unit": unit},
+            )
+
+            new_item = form.save(commit=False)
+            new_item.user = request.user
+            new_item.ingredient = ingredient_obj
+            new_item.save()
+
+    return redirect("dashboard")
 
 
-def recipe_detail_view(request):
-    """Recipe detail page — shows ingredients, instructions, and cook action."""
-    context = {
-        'recipe': {
-            'name': 'Creamy Mushroom Pasta',
-            'thumb': 'pasta',
-            'cook_time': 25,
-            'difficulty': 'Easy',
-            'match': 80,
-            'ingredients': [
-                {'name': 'Pasta', 'quantity': 200, 'unit': 'g', 'status': 'In Stock', 'status_class': 'success'},
-                {'name': 'Mushrooms', 'quantity': 150, 'unit': 'g', 'status': 'In Stock', 'status_class': 'success'},
-                {'name': 'Cream', 'quantity': 100, 'unit': 'ml', 'status': 'Missing', 'status_class': 'danger'},
-                {'name': 'Garlic', 'quantity': 2, 'unit': 'cloves', 'status': 'In Stock', 'status_class': 'success'},
-            ],
-            'steps': [
-                'Boil the pasta until al dente.',
-                'Sauté garlic and mushrooms in a pan.',
-                'Add cream and stir until smooth.',
-                'Mix in the cooked pasta and serve hot.',
-            ],
-        },
-    }
-    return render(request, 'kitchen/recipe/detail.html', context)
+@login_required(login_url="login")
+def edit_inventory_view(request, item_id):
+    item = get_object_or_404(Inventory, id=item_id, user=request.user)
+    if request.method == "POST":
+        form = InventoryForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect("dashboard")
+    else:
+        form = InventoryForm(instance=item)
+    return render(request, "kitchen/inventory/edit_inventory.html", {"form": form, "item": item})
 
 
-# ── AJAX endpoints ──
-
-@login_required
+@login_required(login_url="login")
 def add_ingredient(request):
     """AJAX endpoint: add a new ingredient to the user's inventory."""
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-        except json.JSONDecodeError:
-            return JsonResponse({'success': False, 'message': 'Invalid JSON.'}, status=400)
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": "Only POST allowed."}, status=405)
 
-        name = data.get('name', '').strip()
-        quantity = data.get('quantity')
-        unit = data.get('unit', 'pcs')
-        expiry_date = data.get('expiry_date')
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"success": False, "message": "Invalid JSON."}, status=400)
 
-        # Basic server-side validation
-        if not name or not quantity or not expiry_date:
-            return JsonResponse({'success': False, 'message': 'All fields are required.'}, status=400)
+    name = (data.get("name") or "").strip()
+    quantity = data.get("quantity")
+    unit = (data.get("unit") or "pcs").strip() or "pcs"
+    expiry_date = data.get("expiry_date")
 
-        # TODO: Save to database via Inventory.objects.create(...)
-        # For now, return success with a generated ID
-        return JsonResponse({
-            'success': True,
-            'id': 'new-' + str(hash(name) % 10000),
-            'message': name + ' added to inventory.',
-        })
+    if not name or not quantity or not expiry_date:
+        return JsonResponse({"success": False, "message": "All fields are required."}, status=400)
 
-    return JsonResponse({'success': False, 'message': 'Only POST allowed.'}, status=405)
+    try:
+        quantity = float(quantity)
+        if quantity <= 0:
+            raise ValueError
+    except (TypeError, ValueError):
+        return JsonResponse({"success": False, "message": "Quantity must be a positive number."}, status=400)
+
+    ingredient, _ = Ingredient.objects.get_or_create(name=name.capitalize(), defaults={"unit": unit})
+    if not ingredient.unit:
+        ingredient.unit = unit
+        ingredient.save(update_fields=["unit"])
+
+    item = Inventory.objects.create(
+        user=request.user,
+        ingredient=ingredient,
+        purchase_date=date.today(),
+        expiry_date=expiry_date,
+        quantity=quantity,
+    )
+
+    return JsonResponse(
+        {
+            "success": True,
+            "id": item.id,
+            "message": f"{ingredient.name} added to inventory.",
+        }
+    )
 
 
-@login_required
+@login_required(login_url="login")
 def edit_ingredient(request, item_id):
     """AJAX endpoint: update an existing ingredient's details."""
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-        except json.JSONDecodeError:
-            return JsonResponse({'success': False, 'message': 'Invalid JSON.'}, status=400)
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": "Only POST allowed."}, status=405)
 
-        # TODO: Lookup Inventory object by item_id and update fields
-        return JsonResponse({
-            'success': True,
-            'message': 'Ingredient updated.',
-        })
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"success": False, "message": "Invalid JSON."}, status=400)
 
-    return JsonResponse({'success': False, 'message': 'Only POST allowed.'}, status=405)
+    item = get_object_or_404(Inventory, id=item_id, user=request.user)
+
+    name = (data.get("name") or "").strip()
+    unit = (data.get("unit") or "pcs").strip() or "pcs"
+    expiry_date = data.get("expiry_date")
+    quantity = data.get("quantity")
+
+    if not name or not quantity or not expiry_date:
+        return JsonResponse({"success": False, "message": "All fields are required."}, status=400)
+
+    try:
+        quantity = float(quantity)
+        if quantity <= 0:
+            raise ValueError
+    except (TypeError, ValueError):
+        return JsonResponse({"success": False, "message": "Quantity must be a positive number."}, status=400)
+
+    ingredient, _ = Ingredient.objects.get_or_create(name=name.capitalize(), defaults={"unit": unit})
+    if not ingredient.unit:
+        ingredient.unit = unit
+        ingredient.save(update_fields=["unit"])
+
+    item.ingredient = ingredient
+    item.quantity = quantity
+    item.expiry_date = expiry_date
+    item.save(update_fields=["ingredient", "quantity", "expiry_date"])
+
+    return JsonResponse({"success": True, "message": "Ingredient updated."})
 
 
-@login_required
+@login_required(login_url="login")
 def delete_ingredient(request, item_id):
-    """AJAX endpoint: delete an ingredient from inventory."""
-    if request.method == 'POST':
-        # TODO: Lookup and delete Inventory object by item_id
-        return JsonResponse({'success': True, 'deleted_id': item_id})
-    return JsonResponse({'success': False, 'message': 'Only POST allowed.'}, status=400)
+    if request.method == "POST":
+        try:
+            item = Inventory.objects.get(id=item_id, user=request.user)
+            item.delete()
+            return JsonResponse({"success": True, "deleted_id": item_id})
+        except Inventory.DoesNotExist:
+            return JsonResponse({"success": False, "message": "Item not found"}, status=404)
+    return JsonResponse({"success": False, "message": "Invalid request"}, status=400)
 
 
-@login_required
+# M4: Intelligent Recipe Matching
+@login_required(login_url="login")
+def recipe_list_view(request):
+    user_ingredient_ids = set(
+        Inventory.objects.filter(user=request.user).values_list("ingredient_id", flat=True)
+    )
+    all_recipes = Recipe.objects.prefetch_related("required_ingredients__ingredient")
+
+    recipe_data_list = []
+    for recipe in all_recipes:
+        required_items = list(recipe.required_ingredients.all())
+        total_required = len(required_items)
+        have_count = sum(1 for req in required_items if req.ingredient_id in user_ingredient_ids)
+        match_percentage = int((have_count / total_required) * 100) if total_required else 0
+
+        recipe_data_list.append(
+            {
+                "recipe": recipe,
+                "match_percentage": match_percentage,
+                "total_required": total_required,
+                "have_count": have_count,
+                "missing_count": total_required - have_count,
+            }
+        )
+
+    recipe_data_list.sort(key=lambda x: x["match_percentage"], reverse=True)
+
+    featured_recipe = recipe_data_list[0] if recipe_data_list else None
+    return render(
+        request,
+        "kitchen/recipe/list.html",
+        {
+            "recipe_data_list": recipe_data_list,
+            "featured_recipe": featured_recipe,
+        },
+    )
+
+
+@login_required(login_url="login")
+def recipe_detail_view(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    user_ingredient_ids = set(
+        Inventory.objects.filter(user=request.user).values_list("ingredient_id", flat=True)
+    )
+    required_items = list(recipe.required_ingredients.select_related("ingredient"))
+
+    total_required = len(required_items)
+    have_count = sum(1 for req in required_items if req.ingredient_id in user_ingredient_ids)
+    match_percentage = int((have_count / total_required) * 100) if total_required else 0
+
+    context = {
+        "recipe": recipe,
+        "match_percentage": match_percentage,
+    }
+    return render(request, "kitchen/recipe/detail.html", context)
+
+
+@login_required(login_url="login")
 def mark_recipe_cooked(request):
-    """AJAX endpoint: mark a recipe as cooked, decrement inventory quantities."""
-    if request.method == 'POST':
-        # TODO: Decrement ingredient quantities in Inventory based on recipe
-        return JsonResponse({
-            'success': True,
-            'message': 'Recipe marked as cooked. Inventory updated.',
-        })
-    return JsonResponse({'success': False, 'message': 'Only POST allowed.'}, status=400)
+    if request.method == "POST":
+        return JsonResponse({"success": True, "message": "Recipe marked as cooked. Inventory updated."})
+    return JsonResponse({"success": False, "message": "Only POST allowed."}, status=400)
