@@ -11,29 +11,30 @@
                 <p class="text-muted mb-0">Log in to manage your kitchen inventory.</p>
             </div>
 
+            <!-- Non-field errors (e.g. wrong credentials) displayed with ARIA live region -->
             {% if form and form.non_field_errors %}
-                <div class="alert alert-danger rounded-4" role="alert" aria-live="polite" aria-atomic="true">
+                <div class="alert alert-danger rounded-4" role="alert"
+                     aria-live="polite" aria-atomic="true">
                     {% for error in form.non_field_errors %}
                         <div>{{ error }}</div>
                     {% endfor %}
                 </div>
             {% endif %}
 
-            <form method="post" action="{% url 'login' %}" novalidate>
+            <!-- Login form: uses named URL for action (reverse-resolved, no hard-coding) -->
+            <form method="post" action="{% url 'login' %}" novalidate id="login-form">
                 {% csrf_token %}
 
+                <!-- Username field with explicit <label> (WCAG 3.3.2) -->
                 <div class="mb-3">
                     <label for="id_username" class="form-label">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        id="id_username"
-                        class="form-control{% if form and form.username.errors %} is-invalid{% endif %}"
-                        autocomplete="username"
-                        value="{% if form %}{{ form.username.value|default:'' }}{% endif %}"
-                        required
-                        aria-required="true">
+                    <input type="text" name="username" id="id_username"
+                           class="form-control{% if form and form.username.errors %} is-invalid{% endif %}"
+                           autocomplete="username"
+                           value="{% if form %}{{ form.username.value|default:'' }}{% endif %}"
+                           required aria-required="true">
                     {% if form and form.username.errors %}
+                        <!-- WCAG 3.3.1: visible error text with recovery guidance -->
                         <div class="invalid-feedback d-block" role="alert">
                             {% for error in form.username.errors %}
                                 <div>{{ error }}</div>
@@ -42,16 +43,13 @@
                     {% endif %}
                 </div>
 
+                <!-- Password field -->
                 <div class="mb-3">
                     <label for="id_password" class="form-label">Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="id_password"
-                        class="form-control{% if form and form.password.errors %} is-invalid{% endif %}"
-                        autocomplete="current-password"
-                        required
-                        aria-required="true">
+                    <input type="password" name="password" id="id_password"
+                           class="form-control{% if form and form.password.errors %} is-invalid{% endif %}"
+                           autocomplete="current-password"
+                           required aria-required="true">
                     {% if form and form.password.errors %}
                         <div class="invalid-feedback d-block" role="alert">
                             {% for error in form.password.errors %}
@@ -61,7 +59,7 @@
                     {% endif %}
                 </div>
 
-                <button type="submit" class="btn btn-success w-100">Login</button>
+                <button type="submit" class="btn btn-success w-100 btn-lg">Login</button>
             </form>
 
             <p class="text-center mt-3 mb-0">

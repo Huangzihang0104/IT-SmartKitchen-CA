@@ -1,53 +1,80 @@
 {% extends 'kitchen/base.html' %}
 
-{% block title %}Recipe Detail | SmartKitchen{% endblock %}
+{% block title %}{{ recipe.name|default:"Recipe Detail" }} | SmartKitchen{% endblock %}
 
 {% block content %}
+<!-- Back navigation link (goes to recipe list, not dashboard) -->
 <div class="mb-3">
-    <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Back to Dashboard
+    <a href="{% url 'recipe_list' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Recipes
     </a>
 </div>
 
 <div class="row g-4">
+    <!-- Left column: recipe image / thumbnail -->
     <div class="col-12 col-lg-5">
         <div class="card p-4 h-100">
-            <div class="recipe-detail-thumb recipe-detail-pasta">
+            <div class="recipe-detail-thumb recipe-detail-{{ recipe.thumb|default:'pasta' }}">
                 <div class="recipe-detail-thumb-content">
                     <div class="recipe-detail-thumb-subtitle">Featured recipe</div>
-                    <p class="recipe-detail-thumb-title">Creamy Mushroom Pasta</p>
+                    <p class="recipe-detail-thumb-title">{{ recipe.name|default:"Creamy Mushroom Pasta" }}</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Right column: recipe info, ingredients, instructions -->
     <div class="col-12 col-lg-7">
         <div class="card p-4">
+            <!-- Recipe header with cook info and action button -->
             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
                 <div>
-                    <h1 class="h2 fw-bold mb-1">Creamy Mushroom Pasta</h1>
-                    <p class="text-muted mb-0">Cook time: 25 mins | Difficulty: Easy</p>
+                    <h1 class="h2 fw-bold mb-1">{{ recipe.name|default:"Creamy Mushroom Pasta" }}</h1>
+                    <p class="text-muted mb-0">
+                        Cook time: {{ recipe.cook_time|default:"25" }} mins |
+                        Difficulty: {{ recipe.difficulty|default:"Easy" }}
+                    </p>
                 </div>
 
                 {% csrf_token %}
                 <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
-                    <button
-                        type="button"
-                        class="btn btn-success mark-cooked-btn"
-                        data-url="{% url 'mark_recipe_cooked' %}">
-                        Mark as Cooked
+                    <!-- Mark as Cooked: AJAX POST, updates inventory quantities -->
+                    <button type="button"
+                            class="btn btn-success mark-cooked-btn"
+                            data-url="{% url 'mark_recipe_cooked' %}"
+                            id="mark-cooked-btn">
+                        <i class="bi bi-check2-circle me-1" aria-hidden="true"></i>Mark as Cooked
                     </button>
-                    <div
-                        id="cook-status-message"
-                        class="small text-success"
-                        role="status"
-                        aria-live="polite"
-                        aria-atomic="true"></div>
+                    <!-- Status feedback area for AJAX response -->
+                    <div id="cook-status-message" class="small text-success"
+                         role="status" aria-live="polite" aria-atomic="true"></div>
                 </div>
             </div>
 
+            <!-- Match percentage indicator -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="fw-semibold small">Ingredient match</span>
+                    <span class="badge badge-soft-success">{{ recipe.match|default:"80" }}%</span>
+                </div>
+                <!-- Visual progress bar for match percentage -->
+                <div class="progress" style="height: 6px;" role="progressbar"
+                     aria-label="Ingredient match percentage"
+                     aria-valuenow="{{ recipe.match|default:'80' }}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar bg-success" style="width: {{ recipe.match|default:'80' }}%"></div>
+                </div>
+            </div>
+
+            <!-- Ingredients checklist: shows in-stock vs missing -->
             <h2 class="h5 mt-4">Ingredients</h2>
             <ul class="list-group list-group-flush mb-4">
+                {% for ing in recipe.ingredients %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ ing.quantity }} {{ ing.unit }} {{ ing.name }}</span>
+                    <span class="badge badge-soft-{{ ing.status_class }}">{{ ing.status }}</span>
+                </li>
+                {% empty %}
+                <!-- Fallback demo data when no backend context provided -->
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>200 g Pasta</span>
                     <span class="badge badge-soft-success">In Stock</span>
@@ -64,14 +91,20 @@
                     <span>2 cloves Garlic</span>
                     <span class="badge badge-soft-success">In Stock</span>
                 </li>
+                {% endfor %}
             </ul>
 
+            <!-- Cooking instructions (numbered steps) -->
             <h2 class="h5">Instructions</h2>
-            <ol class="mb-0">
-                <li class="mb-2">Boil the pasta until al dente.</li>
-                <li class="mb-2">Saute garlic and mushrooms in a pan.</li>
-                <li class="mb-2">Add cream and stir until smooth.</li>
-                <li class="mb-2">Mix in the cooked pasta and serve hot.</li>
+            <ol class="instruction-list mb-0">
+                {% for step in recipe.steps %}
+                    <li class="mb-2">{{ step }}</li>
+                {% empty %}
+                    <li class="mb-2">Boil the pasta until al dente.</li>
+                    <li class="mb-2">Saut&eacute; garlic and mushrooms in a pan.</li>
+                    <li class="mb-2">Add cream and stir until smooth.</li>
+                    <li class="mb-2">Mix in the cooked pasta and serve hot.</li>
+                {% endfor %}
             </ol>
         </div>
     </div>

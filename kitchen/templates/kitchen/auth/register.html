@@ -12,27 +12,27 @@
             </div>
 
             {% if form and form.non_field_errors %}
-                <div class="alert alert-danger rounded-4" role="alert" aria-live="polite" aria-atomic="true">
+                <div class="alert alert-danger rounded-4" role="alert"
+                     aria-live="polite" aria-atomic="true">
                     {% for error in form.non_field_errors %}
                         <div>{{ error }}</div>
                     {% endfor %}
                 </div>
             {% endif %}
 
-            <form method="post" action="{% url 'register' %}" novalidate>
+            <!-- Registration form: named URL action, novalidate to use server-side + JS validation -->
+            <form method="post" action="{% url 'register' %}" novalidate id="register-form">
                 {% csrf_token %}
 
                 <div class="mb-3">
                     <label for="id_username" class="form-label">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        id="id_username"
-                        class="form-control{% if form and form.username.errors %} is-invalid{% endif %}"
-                        autocomplete="username"
-                        value="{% if form %}{{ form.username.value|default:'' }}{% endif %}"
-                        required
-                        aria-required="true">
+                    <input type="text" name="username" id="id_username"
+                           class="form-control{% if form and form.username.errors %} is-invalid{% endif %}"
+                           autocomplete="username"
+                           value="{% if form %}{{ form.username.value|default:'' }}{% endif %}"
+                           required aria-required="true"
+                           aria-describedby="username-help">
+                    <div id="username-help" class="form-text">Required. 150 characters or fewer.</div>
                     {% if form and form.username.errors %}
                         <div class="invalid-feedback d-block" role="alert">
                             {% for error in form.username.errors %}
@@ -44,15 +44,11 @@
 
                 <div class="mb-3">
                     <label for="id_email" class="form-label">Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        id="id_email"
-                        class="form-control{% if form and form.email.errors %} is-invalid{% endif %}"
-                        autocomplete="email"
-                        value="{% if form %}{{ form.email.value|default:'' }}{% endif %}"
-                        required
-                        aria-required="true">
+                    <input type="email" name="email" id="id_email"
+                           class="form-control{% if form and form.email.errors %} is-invalid{% endif %}"
+                           autocomplete="email"
+                           value="{% if form %}{{ form.email.value|default:'' }}{% endif %}"
+                           required aria-required="true">
                     {% if form and form.email.errors %}
                         <div class="invalid-feedback d-block" role="alert">
                             {% for error in form.email.errors %}
@@ -64,14 +60,12 @@
 
                 <div class="mb-3">
                     <label for="id_password1" class="form-label">Password</label>
-                    <input
-                        type="password"
-                        name="password1"
-                        id="id_password1"
-                        class="form-control{% if form and form.password1.errors %} is-invalid{% endif %}"
-                        autocomplete="new-password"
-                        required
-                        aria-required="true">
+                    <input type="password" name="password1" id="id_password1"
+                           class="form-control{% if form and form.password1.errors %} is-invalid{% endif %}"
+                           autocomplete="new-password"
+                           required aria-required="true"
+                           aria-describedby="password-help">
+                    <div id="password-help" class="form-text">Must be at least 8 characters.</div>
                     {% if form and form.password1.errors %}
                         <div class="invalid-feedback d-block" role="alert">
                             {% for error in form.password1.errors %}
@@ -83,14 +77,10 @@
 
                 <div class="mb-3">
                     <label for="id_password2" class="form-label">Confirm Password</label>
-                    <input
-                        type="password"
-                        name="password2"
-                        id="id_password2"
-                        class="form-control{% if form and form.password2.errors %} is-invalid{% endif %}"
-                        autocomplete="new-password"
-                        required
-                        aria-required="true">
+                    <input type="password" name="password2" id="id_password2"
+                           class="form-control{% if form and form.password2.errors %} is-invalid{% endif %}"
+                           autocomplete="new-password"
+                           required aria-required="true">
                     {% if form and form.password2.errors %}
                         <div class="invalid-feedback d-block" role="alert">
                             {% for error in form.password2.errors %}
@@ -100,7 +90,7 @@
                     {% endif %}
                 </div>
 
-                <button type="submit" class="btn btn-success w-100">Sign Up</button>
+                <button type="submit" class="btn btn-success w-100 btn-lg">Sign Up</button>
             </form>
 
             <p class="text-center mt-3 mb-0">

@@ -3,6 +3,7 @@
 {% block title %}Recipe Recommendations | SmartKitchen{% endblock %}
 
 {% block content %}
+<!-- Page header -->
 <div class="mb-4">
     <div class="mb-3">
         <div class="small text-uppercase text-muted fw-semibold mb-2">Discover recipes</div>
@@ -12,158 +13,140 @@
         </p>
     </div>
 
+    <!-- ── Filter bar: client-side filtering powered by JavaScript ── -->
     <div class="card p-3 p-md-4 mb-3">
         <div class="row g-3 align-items-end">
             <div class="col-12 col-lg-6">
                 <label for="recipe-search" class="form-label fw-semibold">Search recipes</label>
-                <input type="text" id="recipe-search" class="form-control" placeholder="Search pasta, soup, rice...">
+                <input type="text" id="recipe-search" class="form-control"
+                       placeholder="Search pasta, soup, rice..."
+                       aria-label="Search recipes by name">
             </div>
-
             <div class="col-6 col-md-3 col-lg-2">
-                <label for="cook-time" class="form-label fw-semibold">Time</label>
-                <select id="cook-time" class="form-select">
-                    <option selected>Any</option>
-                    <option>Under 15 mins</option>
-                    <option>Under 30 mins</option>
-                    <option>30+ mins</option>
+                <label for="filter-cook-time" class="form-label fw-semibold">Time</label>
+                <select id="filter-cook-time" class="form-select" aria-label="Filter by cooking time">
+                    <option value="any" selected>Any</option>
+                    <option value="15">Under 15 mins</option>
+                    <option value="30">Under 30 mins</option>
+                    <option value="31">30+ mins</option>
                 </select>
             </div>
-
             <div class="col-6 col-md-3 col-lg-2">
-                <label for="difficulty" class="form-label fw-semibold">Difficulty</label>
-                <select id="difficulty" class="form-select">
-                    <option selected>Any</option>
-                    <option>Easy</option>
-                    <option>Medium</option>
-                    <option>Hard</option>
+                <label for="filter-difficulty" class="form-label fw-semibold">Difficulty</label>
+                <select id="filter-difficulty" class="form-select" aria-label="Filter by difficulty">
+                    <option value="any" selected>Any</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
                 </select>
             </div>
-
             <div class="col-6 col-md-3 col-lg-2">
-                <label for="dietary" class="form-label fw-semibold">Diet</label>
-                <select id="dietary" class="form-select">
-                    <option selected>Any</option>
-                    <option>Vegetarian</option>
-                    <option>Vegan</option>
-                    <option>High Protein</option>
+                <label for="filter-dietary" class="form-label fw-semibold">Diet</label>
+                <select id="filter-dietary" class="form-select" aria-label="Filter by dietary need">
+                    <option value="any" selected>Any</option>
+                    <option value="Vegetarian">Vegetarian</option>
+                    <option value="Vegan">Vegan</option>
+                    <option value="High Protein">High Protein</option>
                 </select>
             </div>
         </div>
 
+        <!-- Quick-filter chips: clickable JS-driven shortcuts -->
         <div class="d-flex flex-wrap gap-2 mt-3">
-            <span class="recipe-chip">Quick dinners</span>
-            <span class="recipe-chip">Vegetarian</span>
-            <span class="recipe-chip">Use expiring items</span>
-            <span class="recipe-chip">High protein</span>
-            <span class="recipe-chip">Pantry friendly</span>
+            <button type="button" class="recipe-chip" data-filter-tag="quick">Quick dinners</button>
+            <button type="button" class="recipe-chip" data-filter-tag="vegetarian">Vegetarian</button>
+            <button type="button" class="recipe-chip" data-filter-tag="expiring">Use expiring items</button>
+            <button type="button" class="recipe-chip" data-filter-tag="protein">High protein</button>
+            <button type="button" class="recipe-chip" data-filter-tag="pantry">Pantry friendly</button>
         </div>
     </div>
 </div>
 
+<!-- ── Featured recipe highlight ── -->
+{% if featured_recipe %}
 <div class="card featured-recipe-card p-4 p-lg-5 mb-5">
     <div class="row g-4 align-items-center">
         <div class="col-12 col-lg-6">
-            <div class="recipe-thumb recipe-thumb-pasta">
+            <div class="recipe-thumb recipe-thumb-{{ featured_recipe.thumb }}">
                 <div class="recipe-thumb-content">
                     <span class="recipe-thumb-label">Featured recommendation</span>
-                    <p class="recipe-thumb-title">Creamy Mushroom Pasta</p>
+                    <p class="recipe-thumb-title">{{ featured_recipe.name }}</p>
                 </div>
             </div>
         </div>
-
         <div class="col-12 col-lg-6">
             <div class="featured-recipe-copy">
                 <div class="small text-uppercase text-success fw-semibold mb-2">Best match today</div>
-                <h2 class="display-6 fw-bold mb-3">Creamy Mushroom Pasta</h2>
-                <p class="recipe-meta mb-3">25 mins · Easy · Vegetarian · 85% match</p>
-                <p class="mb-4">
-                    A quick, creamy pasta dish that makes excellent use of mushrooms, garlic, and ingredients already in your kitchen.
+                <h2 class="display-6 fw-bold mb-3">{{ featured_recipe.name }}</h2>
+                <p class="recipe-meta mb-3">
+                    {{ featured_recipe.cook_time }} mins &middot;
+                    {{ featured_recipe.difficulty }} &middot;
+                    {{ featured_recipe.dietary }} &middot;
+                    {{ featured_recipe.match }}% match
                 </p>
-
-                <div class="d-flex flex-wrap gap-2 mb-4">
-                    <span class="badge badge-soft-warning">Uses expiring milk</span>
-                    <span class="badge badge-soft-success">Weeknight friendly</span>
-                </div>
-
+                <p class="mb-4">{{ featured_recipe.description }}</p>
                 <a href="{% url 'recipe_detail' %}" class="btn btn-success px-4">View Recipe</a>
             </div>
         </div>
     </div>
 </div>
+{% endif %}
 
+<!-- ── Recipe results grid ── -->
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-    <h2 class="h3 fw-bold mb-0">More recipes you can make</h2>
-    <span class="text-muted">3 results</span>
+    <h2 class="h3 fw-bold mb-0">
+        {% if featured_recipe %}More recipes you can make{% else %}Recipes{% endif %}
+    </h2>
+    <span id="recipe-result-count" class="text-muted">{{ recipes|length }} results</span>
 </div>
 
-<div class="row g-4">
-    <div class="col-12 col-md-6 col-xl-4">
+<div class="row g-4" id="recipe-grid">
+    {% for recipe in recipes %}
+    <div class="col-12 col-md-6 col-xl-4 recipe-card-wrapper"
+         data-name="{{ recipe.name|lower }}"
+         data-cook-time="{{ recipe.cook_time }}"
+         data-difficulty="{{ recipe.difficulty }}"
+         data-dietary="{{ recipe.dietary|lower }}"
+         data-match="{{ recipe.match }}"
+         data-tags="{{ recipe.tags|lower }}">
         <div class="card h-100 overflow-hidden">
             <div class="p-3">
-                <div class="recipe-thumb recipe-thumb-omelette">
+                <div class="recipe-thumb recipe-thumb-{{ recipe.thumb }}">
                     <div class="recipe-thumb-content">
-                        <span class="recipe-thumb-label">Quick & fresh</span>
-                        <p class="recipe-thumb-title">Spinach Omelette</p>
+                        <span class="recipe-thumb-label">{{ recipe.label }}</span>
+                        <p class="recipe-thumb-title">{{ recipe.name }}</p>
                     </div>
                 </div>
             </div>
             <div class="card-body pt-0">
-                <h3 class="h4 fw-bold">Spinach Omelette</h3>
-                <p class="recipe-meta mb-2">15 mins · Easy · High Protein</p>
-                <p class="mb-3">An efficient way to use eggs and spinach before they expire.</p>
+                <h3 class="h4 fw-bold">{{ recipe.name }}</h3>
+                <p class="recipe-meta mb-2">
+                    {{ recipe.cook_time }} mins &middot;
+                    {{ recipe.difficulty }} &middot;
+                    {{ recipe.dietary }}
+                </p>
+                <p class="mb-3">{{ recipe.description }}</p>
                 <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge badge-soft-success">92% Match</span>
-                    <span class="badge badge-soft-danger">Spinach expiring</span>
+                    <span class="badge badge-soft-success">{{ recipe.match }}% Match</span>
+                    {% if recipe.badge %}
+                        <span class="badge badge-soft-{{ recipe.badge_class }}">{{ recipe.badge }}</span>
+                    {% endif %}
                 </div>
                 <a href="{% url 'recipe_detail' %}" class="btn btn-success w-100">View Details</a>
             </div>
         </div>
     </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="text-center text-muted py-5">
+            <p class="fs-5">No recipes found. Try adjusting your filters.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card h-100 overflow-hidden">
-            <div class="p-3">
-                <div class="recipe-thumb recipe-thumb-rice">
-                    <div class="recipe-thumb-content">
-                        <span class="recipe-thumb-label">Pantry friendly</span>
-                        <p class="recipe-thumb-title">Garlic Fried Rice</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body pt-0">
-                <h3 class="h4 fw-bold">Garlic Fried Rice</h3>
-                <p class="recipe-meta mb-2">20 mins · Medium · Dairy Free</p>
-                <p class="mb-3">A flexible recipe ideal for leftover rice and quick weeknight cooking.</p>
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge badge-soft-success">78% Match</span>
-                    <span class="badge badge-soft-success">Good pantry fit</span>
-                </div>
-                <a href="{% url 'recipe_detail' %}" class="btn btn-success w-100">View Details</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card h-100 overflow-hidden">
-            <div class="p-3">
-                <div class="recipe-thumb recipe-thumb-bake">
-                    <div class="recipe-thumb-content">
-                        <span class="recipe-thumb-label">Comfort food</span>
-                        <p class="recipe-thumb-title">Tomato Pasta Bake</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body pt-0">
-                <h3 class="h4 fw-bold">Tomato Pasta Bake</h3>
-                <p class="recipe-meta mb-2">30 mins · Easy · Family Style</p>
-                <p class="mb-3">A simple baked pasta dish that works well with staple cupboard ingredients.</p>
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge badge-soft-success">74% Match</span>
-                    <span class="badge badge-soft-warning">Great for leftovers</span>
-                </div>
-                <a href="{% url 'recipe_detail' %}" class="btn btn-success w-100">View Details</a>
-            </div>
-        </div>
-    </div>
+<!-- Hidden message for when JS filtering produces no results -->
+<div id="no-filter-results" class="text-center text-muted py-5 d-none">
+    <p class="fs-5">No recipes match your current filters. Try broadening your search.</p>
 </div>
 {% endblock %}

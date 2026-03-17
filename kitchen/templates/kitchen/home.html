@@ -3,10 +3,11 @@
 {% block title %}Home | SmartKitchen{% endblock %}
 
 {% block content %}
-<div class="hero-card mb-4">
+<!-- Hero section: main call-to-action, adapts content based on login state -->
+<section class="hero-card mb-4">
     <div class="row align-items-center g-4">
         <div class="col-12 col-lg-7">
-            <p class="text-uppercase fw-semibold mb-3" style="letter-spacing: 0.08em; opacity: 0.85;">
+            <p class="text-uppercase fw-semibold mb-3 hero-label">
                 Smart Kitchen Management
             </p>
 
@@ -15,7 +16,6 @@
                 <p class="fs-4 mb-4">
                     Your kitchen is ready. Open your dashboard, check expiring items, and continue cooking smarter.
                 </p>
-
                 <div class="d-flex flex-wrap gap-3 mt-4">
                     <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg px-4">Open Dashboard</a>
                     <a href="{% url 'recipe_list' %}" class="btn btn-outline-light btn-lg px-4">Browse Recipes</a>
@@ -25,13 +25,13 @@
                 <p class="fs-4 mb-4">
                     SmartKitchen helps you track ingredients, discover recipes you can cook right now, and reduce food waste before items expire.
                 </p>
-
                 <div class="d-flex flex-wrap gap-3 mt-4">
                     <a href="{% url 'register' %}" class="btn btn-light btn-lg px-4">Get Started</a>
                     <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4">Log In</a>
                 </div>
             {% endif %}
 
+            <!-- Feature highlight badges -->
             <div class="d-flex flex-wrap gap-2 mt-4">
                 <span class="badge bg-light text-success fs-6 px-3 py-2">Inventory Tracking</span>
                 <span class="badge bg-light text-success fs-6 px-3 py-2">70%+ Recipe Match</span>
@@ -39,6 +39,7 @@
             </div>
         </div>
 
+        <!-- Kitchen snapshot card: live-overview panel -->
         <div class="col-12 col-lg-5">
             <div class="card p-4">
                 <div class="d-flex justify-content-between align-items-start mb-3">
@@ -51,36 +52,16 @@
 
                 <div class="row g-3 mb-3">
                     <div class="col-6">
-                        <div class="border rounded-4 p-3 h-100" style="border-color: #ece7de !important;">
+                        <div class="snapshot-stat">
                             <div class="text-muted small">Ingredients</div>
-                            <div class="fs-1 fw-bold">24</div>
+                            <div class="fs-1 fw-bold">{{ total_ingredients|default:"0" }}</div>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="border rounded-4 p-3 h-100" style="border-color: #ece7de !important;">
+                        <div class="snapshot-stat">
                             <div class="text-muted small">Recipes Matched</div>
-                            <div class="fs-1 fw-bold">12</div>
+                            <div class="fs-1 fw-bold">{{ total_recipes|default:"0" }}</div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="border rounded-4 p-3 mb-3" style="border-color: #ece7de !important;">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <div class="fw-bold fs-4">Milk</div>
-                            <div class="text-muted">Expires soon</div>
-                        </div>
-                        <span class="badge badge-soft-warning">Priority</span>
-                    </div>
-                </div>
-
-                <div class="border rounded-4 p-3 mb-4" style="border-color: #ece7de !important;">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <div class="fw-bold h4 mb-1">Best recipe match</div>
-                            <div class="text-muted">Creamy Mushroom Pasta</div>
-                        </div>
-                        <span class="badge badge-soft-success">85%</span>
                     </div>
                 </div>
 
@@ -91,43 +72,49 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<div class="row g-4 mb-4">
+<!-- Feature cards row: three key value propositions -->
+<section class="row g-4 mb-4" aria-label="Key features">
     <div class="col-12 col-md-4">
         <div class="card p-4 h-100">
-            <div class="fs-1 mb-3">🥬</div>
+            <div class="feature-icon mb-3" aria-hidden="true">
+                <i class="bi bi-box-seam"></i>
+            </div>
             <h2 class="h3 fw-bold">Inventory Tracking</h2>
             <p class="text-muted mb-0">
                 Keep your pantry and fridge organised with ingredient names, quantities, units, and expiry dates.
             </p>
         </div>
     </div>
-
     <div class="col-12 col-md-4">
         <div class="card p-4 h-100">
-            <div class="fs-1 mb-3">🍳</div>
+            <div class="feature-icon mb-3" aria-hidden="true">
+                <i class="bi bi-fire"></i>
+            </div>
             <h2 class="h3 fw-bold">Recipe Matching</h2>
             <p class="text-muted mb-0">
                 Discover meals based on what is already in stock, ranked by ingredient match and cooking convenience.
             </p>
         </div>
     </div>
-
     <div class="col-12 col-md-4">
         <div class="card p-4 h-100">
-            <div class="fs-1 mb-3">⏰</div>
+            <div class="feature-icon mb-3" aria-hidden="true">
+                <i class="bi bi-clock-history"></i>
+            </div>
             <h2 class="h3 fw-bold">Expiry Awareness</h2>
             <p class="text-muted mb-0">
                 Spot ingredients that are close to expiry so you can use them first and avoid unnecessary waste.
             </p>
         </div>
     </div>
-</div>
+</section>
 
-<div class="row g-4">
+<!-- Bottom CTA row -->
+<section class="row g-4">
     <div class="col-12 col-lg-6">
-        <div class="card p-4 h-100">
+        <div class="card p-4 h-100 d-flex flex-column">
             <h2 class="h3 fw-bold mb-3">Start with your inventory</h2>
             <p class="text-muted">
                 Add ingredients to your dashboard and keep your kitchen data accurate across sessions.
@@ -137,9 +124,8 @@
             </div>
         </div>
     </div>
-
     <div class="col-12 col-lg-6">
-        <div class="card p-4 h-100">
+        <div class="card p-4 h-100 d-flex flex-column">
             <h2 class="h3 fw-bold mb-3">Explore recommended recipes</h2>
             <p class="text-muted">
                 Filter by cooking time, difficulty, and dietary needs to find a suitable meal fast.
@@ -149,5 +135,5 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}
