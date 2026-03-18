@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 # Create your models here.
 # 1. ingredient
@@ -22,6 +23,34 @@ class Inventory(models.Model):
     expiry_date = models.DateField()
     quantity = models.FloatField()
     is_notified = models.BooleanField(default=False)
+
+    @property
+    def name(self):
+        return self.ingredient.name
+    
+    @property
+    def unit(self):
+        return self.ingredient.unit
+
+    @property
+    def status_label(self):
+        today = date.today()
+        if self.expiry_date < today:
+            return "Expired"
+        days_left = (self.expiry_date - today).days
+        if days_left <= 3:
+            return "Expiring Soon"
+        return "Fresh"
+    
+    @property
+    def status_class(self):
+        today = date.today()
+        if self.expiry_date < today:
+            return "danger"
+        days_left = (self.expiry_date - today).days
+        if days_left <= 3:
+            return "warning"
+        return "success"
 
     def __str__(self):
         return f"{self.user.username}'s {self.ingredient.name}"

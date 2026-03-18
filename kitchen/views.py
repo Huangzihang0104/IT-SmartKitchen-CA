@@ -12,9 +12,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
-
+from datetime import timedelta
 from .forms import CustomUserCreationForm, InventoryForm
-from .models import Ingredient, Inventory, Recipe
+from .models import Ingredient, Inventory, Recipe, RecipeIngredient
+from django.utils import timezone
 
 
 def _expiry_status(expiry_date):
@@ -29,7 +30,27 @@ def _expiry_status(expiry_date):
 
 
 def home(request):
-    return render(request, "kitchen/home.html")
+    # Get the total number of ingredients in the current user's inventory
+    
+    ingredients_count = Inventory.objects.filter(user=request.user).count()
+
+    # Get the number of recipes that matched
+    user_ingredient_ids = set(
+        Inventory.objects.filter(user=request.user).values_list("ingredient_id", flat=True)
+    )
+
+    all_recipes = Recipe.objects.prefetch_related("required_ingredients")
+    matched_count = 0
+
+    for recipe in all_recipes:
+        recipe_ingredient_ids = [ri.ingredient_id for ri in recipe.required_ingredients.all()]
+        if any(ing_id in user_ingredient_ids for ing_id in recipe_ingredient_ids):
+            matched_count += 1
+
+    return render(request, "kitchen/home.html", {
+        'total_ingredients': ingredients_count, 
+        'total_recipes': matched_count,
+    })
 
 
 # Core Authentication Logic (M1)
@@ -72,27 +93,11 @@ def logout_view(request):
 # Inventory Management Logic (M2/M3)
 @login_required(login_url="login")
 def dashboard_view(request):
-    user_inventory = Inventory.objects.filter(user=request.user).select_related("ingredient").order_by("expiry_date")
-    inventory_items = []
-    for item in user_inventory:
-        status_class, status_label = _expiry_status(item.expiry_date)
-        inventory_items.append(
-            {
-                "id": item.id,
-                "name": item.ingredient.name,
-                "quantity": item.quantity,
-                "unit": item.ingredient.unit,
-                "expiry_date": item.expiry_date.strftime("%Y-%m-%d"),
-                "status_class": status_class,
-                "status_label": status_label,
-            }
-        )
-
-    context = {
-        "inventory_items": inventory_items,
-        "form": InventoryForm(),
-    }
-    return render(request, "kitchen/inventory/dashboard.html", context)
+    inventory_items = Inventory.objects.filter(user=request.user).select_related('ingredient').order_by('expiry_date')
+    
+    return render(request, 'kitchen/inventory/dashboard.html', {
+        'inventory_items': inventory_items
+    })
 
 
 @login_required(login_url="login")
@@ -131,6 +136,7 @@ def edit_inventory_view(request, item_id):
 
 
 @login_required(login_url="login")
+@require_POST
 def add_ingredient(request):
     """AJAX endpoint: add a new ingredient to the user's inventory."""
     if request.method != "POST":
@@ -239,6 +245,10 @@ def recipe_list_view(request):
     )
     all_recipes = Recipe.objects.prefetch_related("required_ingredients__ingredient")
 
+    difficulty = request.GET.get('difficulty', 'any').lower()
+    if difficulty != 'any':
+        all_recipes = all_recipes.filter(difficulty=difficulty)
+
     recipe_data_list = []
     for recipe in all_recipes:
         required_items = list(recipe.required_ingredients.all())
@@ -289,7 +299,31 @@ def recipe_detail_view(request, recipe_id):
 
 
 @login_required(login_url="login")
+@require_POST
 def mark_recipe_cooked(request):
-    if request.method == "POST":
-        return JsonResponse({"success": True, "message": "Recipe marked as cooked. Inventory updated."})
-    return JsonResponse({"success": False, "message": "Only POST allowed."}, status=400)
+    import json
+    data = json.loads(request.body)
+    recipe_id = data.get('recipe_id')
+
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    # Find all the ingredients needed for this recipe
+    requirements = RecipeIngredient.objects.filter(recipe=recipe)
+    
+    for req in requirements:
+        # Find the corresponding ingredients in the user's inventory
+        inventory_item = Inventory.objects.filter(
+            user=request.user, 
+            ingredient=req.ingredient
+        ).first()
+        
+        if inventory_item:
+            # Subtract the quantity, ensuring it is not less than 0
+            inventory_item.quantity = max(0, inventory_item.quantity - req.quantity_required)
+            if inventory_item.quantity == 0:
+                inventory_item.delete() 
+            else:
+                inventory_item.save()
+                
+    return JsonResponse({"success": True, "message": "Recipe marked as cooked. Inventory updated."})
+
+    

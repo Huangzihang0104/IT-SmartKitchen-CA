@@ -36,6 +36,7 @@
                     <button type="button"
                             class="btn btn-success mark-cooked-btn"
                             data-url="{% url 'mark_recipe_cooked' %}"
+                            data-recipe-id="{{ recipe.id }}"
                             id="mark-cooked-btn">
                         <i class="bi bi-check2-circle me-1" aria-hidden="true"></i>Mark as Cooked
                     </button>

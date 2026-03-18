@@ -402,3 +402,21 @@ body {
         min-height: 200px;
     }
 }
+.card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+}
+
+/* 2. Make the content area in the middle of the card expand automatically, pushing the button downward */
+.card-body {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-grow: 1 !important;
+}
+
+/* 3. Automatic top spacing */
+.card-body .btn, 
+.card-body .mt-auto {
+    margin-top: auto !important;
+}
