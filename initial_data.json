@@ -396,30 +396,6 @@
     }
 },
 {
-    "model": "kitchen.inventory",
-    "pk": 2,
-    "fields": {
-        "user": 2,
-        "ingredient": 2,
-        "purchase_date": "2026-03-17",
-        "expiry_date": "2026-03-20",
-        "quantity": 5.0,
-        "is_notified": false
-    }
-},
-{
-    "model": "kitchen.inventory",
-    "pk": 3,
-    "fields": {
-        "user": 2,
-        "ingredient": 16,
-        "purchase_date": "2026-03-17",
-        "expiry_date": "2026-03-22",
-        "quantity": 10.0,
-        "is_notified": false
-    }
-},
-{
     "model": "kitchen.recipe",
     "pk": 2,
     "fields": {
