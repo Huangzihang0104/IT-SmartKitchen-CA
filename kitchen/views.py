@@ -30,14 +30,15 @@ def _expiry_status(expiry_date):
 
 
 def home(request):
-    # Get the total number of ingredients in the current user's inventory
-    
-    ingredients_count = Inventory.objects.filter(user=request.user).count()
+    if request.user.is_authenticated:
+        ingredients_count = Inventory.objects.filter(user=request.user).count()
 
-    # Get the number of recipes that matched
-    user_ingredient_ids = set(
-        Inventory.objects.filter(user=request.user).values_list("ingredient_id", flat=True)
-    )
+        user_ingredient_ids = set(
+            Inventory.objects.filter(user=request.user).values_list("ingredient_id", flat=True)
+        )
+    else:
+        ingredients_count = 0
+        user_ingredient_ids = set()
 
     all_recipes = Recipe.objects.prefetch_related("required_ingredients")
     matched_count = 0
@@ -48,10 +49,9 @@ def home(request):
             matched_count += 1
 
     return render(request, "kitchen/home.html", {
-        'total_ingredients': ingredients_count, 
-        'total_recipes': matched_count,
+        "total_ingredients": ingredients_count,
+        "total_recipes": matched_count,
     })
-
 
 # Core Authentication Logic (M1)
 def register_view(request):
