@@ -137,11 +137,29 @@ function initDeleteIngredient() {
         var btn = event.target.closest('.delete-ingredient-btn');
         if (!btn) return;
 
+        event.preventDefault();
+
         var itemId = btn.dataset.id;
         var itemName = btn.dataset.name || 'this ingredient';
 
-        // Confirmation dialog to prevent accidental deletion
-        if (!confirm('Are you sure you want to delete ' + itemName + '?')) return;
+        // Enter your name and ID in the HTML form
+        document.getElementById('delete-item-id').value = itemId;
+        document.getElementById('delete-item-name').innerText = itemName;
+
+        // Pop-up window (Modal)
+        var deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+        deleteModal.show();
+    });
+
+    // When the user clicks the red “Delete” confirmation button in the pop-up window
+    var confirmBtn = document.getElementById('confirm-delete-btn');
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', function () {
+            var itemId = document.getElementById('delete-item-id').value;
+            // Get the current picture-in-picture instance so that it can be closed later
+            var modalElement = document.getElementById('deleteConfirmModal');
+            var modalInstance = bootstrap.Modal.getInstance(modalElement);
+
 
         fetch('/ingredients/delete/' + itemId + '/', {
             method: 'POST',
@@ -150,22 +168,32 @@ function initDeleteIngredient() {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
-        .then(function (response) { return response.json(); })
-        .then(function (data) {
-            if (data.success) {
-                // Remove all DOM elements with matching ingredient ID
-                document.querySelectorAll('[data-ingredient-id="' + itemId + '"]')
-                    .forEach(function (el) { el.remove(); });
-                updateInventoryCount();
-                showGlobalMessage(itemName + ' deleted successfully.');
-            } else {
-                showGlobalMessage(data.message || 'Delete failed.', 'danger');
-            }
-        })
-        .catch(function () {
-            showGlobalMessage('Network error. Please try again.', 'danger');
+        .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 1. close the window
+                    modalInstance.hide();
+
+                    // 2. delet this line
+                    document.querySelectorAll('[data-ingredient-id="' + itemId + '"]').forEach(function (el) {
+                        el.remove();
+                    });
+
+                    // 3. Update the “Total Items” count in the upper-left corner
+                    if (typeof updateInventoryCount === 'function') updateInventoryCount();
+
+                    // 4. success message appears
+                    showGlobalMessage(data.message || 'Deleted successfully!');
+                } else {
+                    showGlobalMessage(data.message || 'Delete failed.', 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showGlobalMessage('Network error, please try again.', 'danger');
+            });
         });
-    });
+    }
 }
 
 
@@ -195,6 +223,9 @@ function initAddIngredient() {
             input.classList.remove('is-invalid');
         });
 
+        const addError = document.getElementById('add-error-msg');
+        if (addError) addError.classList.add('d-none');
+
         // Client-side validation: check required fields before server call
         var isValid = true;
 
@@ -212,7 +243,9 @@ function initAddIngredient() {
         }
 
         if (!isValid) {
-            showGlobalMessage('Please fill in all required fields correctly.', 'warning');
+            const errorDiv = document.getElementById('add-error-msg'); 
+            errorDiv.innerText = 'Please fill in all required fields correctly.';
+            errorDiv.classList.remove('d-none');
             return;
         }
 
@@ -236,6 +269,8 @@ function initAddIngredient() {
         .then(function (data) {
             if (data.success) {
                 // Generate a temporary client-side ID for the new row
+                document.getElementById('add-error-msg').classList.add('d-none');
+                document.getElementById('add-ingredient-form').reset();
                 var newId = data.id || ('temp-' + Date.now());
                 var status = getExpiryStatus(payload.expiry_date);
 
@@ -245,7 +280,6 @@ function initAddIngredient() {
                 insertMobileCard(newId, payload, status);
 
                 // Clear the form inputs
-                form.reset();
                 updateInventoryCount();
                 showGlobalMessage(payload.name + ' added to inventory!');
             } else {
@@ -272,6 +306,13 @@ function insertDesktopRow(id, item, status) {
 
     var tr = document.createElement('tr');
     tr.setAttribute('data-ingredient-id', id);
+    const dateObj = new Date(item.expiry_date);
+    const formattedDate = dateObj.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+
     tr.innerHTML =
         '<td>' + escapeHtml(item.name) + '</td>' +
         '<td>' + item.quantity + ' ' + escapeHtml(item.unit) + '</td>' +
@@ -365,6 +406,7 @@ function initEditIngredient() {
     var saveBtn = document.getElementById('save-edit-btn');
     if (saveBtn) {
         saveBtn.addEventListener('click', function () {
+            document.getElementById('edit-error-msg').classList.add('d-none');
             var itemId = document.getElementById('edit-id').value;
             var payload = {
                 name: document.getElementById('edit-name').value.trim(),
@@ -374,7 +416,11 @@ function initEditIngredient() {
             };
 
             if (!payload.name || !payload.quantity || !payload.expiry_date) {
-                showGlobalMessage('Please fill in all fields.', 'warning');
+                const errorDiv = document.getElementById('edit-error-msg');
+                if (errorDiv) {
+                    errorDiv.innerText = 'Please fill in all fields.';
+                    errorDiv.classList.remove('d-none'); 
+                }
                 return;
             }
 
@@ -469,12 +515,18 @@ function initMarkCooked() {
         btn.disabled = true;
         btn.innerHTML = '<i class="bi bi-hourglass-split me-1" aria-hidden="true"></i>Updating...';
 
+        var recipeId = btn.dataset.recipeId;
+
         fetch(url, {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'X-CSRFToken': getCSRFToken(),
                 'X-Requested-With': 'XMLHttpRequest'
-            }
+            },
+            body: JSON.stringify({
+                'recipe_id': recipeId 
+            })
         })
         .then(function (response) { return response.json(); })
         .then(function (data) {
@@ -569,7 +621,7 @@ function applyRecipeFilters() {
 
     var query = searchInput ? searchInput.value.toLowerCase().trim() : '';
     var cookTimeVal = cookTimeSelect ? cookTimeSelect.value : 'any';
-    var difficultyVal = difficultySelect ? difficultySelect.value : 'any';
+    var difficultyVal = difficultySelect ? difficultySelect.value.toLowerCase() : 'any';
     var dietaryVal = dietarySelect ? dietarySelect.value.toLowerCase() : 'any';
 
     // Collect active chip tags
@@ -584,7 +636,7 @@ function applyRecipeFilters() {
     cards.forEach(function (card) {
         var name = card.dataset.name || '';
         var cookTime = parseInt(card.dataset.cookTime, 10) || 0;
-        var difficulty = card.dataset.difficulty || '';
+        var difficulty = (card.dataset.difficulty || '').toLowerCase();
         var dietary = (card.dataset.dietary || '').toLowerCase();
         var tags = (card.dataset.tags || '').toLowerCase();
         var show = true;
